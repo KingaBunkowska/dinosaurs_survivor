@@ -45,9 +45,9 @@ if __name__ == "__main__":
 
     dinosaur_presenters = [None for _ in range(len(game.dinosaurs))]
     for i, dinosaur in enumerate(game.dinosaurs):
-        dinosaur_presenters[i] = Entity_preseter(dinosaur, color = (0, 0, 255), width = 200, height = 100)
+        dinosaur_presenters[i] = Entity_preseter(dinosaur, color = (0, 0, 255), width = 128, height = 128, dino=True)
 
-    entity_presenter = Entity_preseter(game.player)
+    entity_presenter = Entity_preseter(game.player, width = 25, height= 50)
 
     GREEN = (0, 153, 51)
 
@@ -57,6 +57,8 @@ if __name__ == "__main__":
 
         handle_events()
         handle_player_input()
+
+        game.run_tick()
 
         screen.fill(GREEN)       
 

@@ -7,4 +7,10 @@ class Game:
         self.dinosaurs = []
 
         # for tests purposes
-        self.dinosaurs.append(Dinosaur())
+        self.dinosaurs.append(Dinosaur(position=[700, 700]))
+        self.dinosaurs.append(Dinosaur(position=[100, 100]))
+
+    
+    def run_tick(self):
+        for dinosaur in self.dinosaurs:
+            dinosaur.move(self.player.position)
