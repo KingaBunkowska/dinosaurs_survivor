@@ -1,8 +1,13 @@
 from game_mechanics.Entity import Entity
 import pygame
+from game_mechanics.Dinosaur_type import Dinosaur_type
 
 IMAGES = {
     "stegosaur_green_brown": pygame.image.load('resources/stegosaur_green_brown.png')
+}
+
+SIZE_OF_IMAGES = {
+    "stegosaur_green_brown": [200, 200]
 }
 
 class Entity_preseter:
@@ -11,15 +16,19 @@ class Entity_preseter:
         self.color = color
         self.width = width
         self.height = height
+
+        #dino in constructor should be deleted after getting the image of character
+        # this constructor should get Entity and figure out how to present it from maps. Maps should be placed in different file (maybe JSON)
+
         if dino:
-            # self.image = pygame.transform.scale(IMAGES['stegosaur_green_brown'], (width, height))
-            self.image = IMAGES['stegosaur_green_brown']
+            self.image = pygame.transform.scale(IMAGES['stegosaur_green_brown'], SIZE_OF_IMAGES['stegosaur_green_brown'])
         else:
             self.image = None
 
     def draw(self, screen):
         if self.image != None:
-            screen.blit(self.image, self.entity.position)
+            screen.blit(self.image, self.entity.position.to_coords())
         else:
-            pygame.draw.rect(screen, self.color, pygame.Rect(self.entity.position, [self.width, self.height]))
+            # delete when having image of the character
+            pygame.draw.rect(screen, self.color, pygame.Rect(self.entity.position.to_coords(), [self.width, self.height]))
 
