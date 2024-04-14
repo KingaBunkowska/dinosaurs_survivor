@@ -37,16 +37,17 @@ def handle_player_input():
     if keys[pygame.K_a]:
         x -= 1
     if keys[pygame.K_d]:
+
         x += 1
 
     game.player.move(Position(x, y))
-
 dev_mode = 0
 
 if __name__ == "__main__":
     FPS = 60
     clock = pygame.time.Clock()
     pygame.init()
+    
 
     # screen_width, screen_height = pygame.display.Info().current_w, pygame.display.Info().current_h
     screen_width, screen_height = 1360, 748
@@ -57,24 +58,21 @@ if __name__ == "__main__":
     game = Game(screen)
     running = True
 
-    # dinosaur_presenters = [None for _ in range(len(game.dinosaurs))]
-    # for i, dinosaur in enumerate(game.dinosaurs):
-    #     dinosaur_presenters[i] = Entity_preseter(dinosaur, color = (0, 0, 255), width = 128, height = 128, dino=True)
+    entity_presenter = Entity_preseter(game.player, width = 25, height = 50)
 
-    entity_presenter = Entity_preseter(game.player, width=25, height=50)
 
     GREEN = (0, 153, 51)
 
     while running:
+
         clock.tick(FPS)
 
         handle_events()
         handle_player_input()
-        screen.fill(GREEN)
+
+        screen.fill(GREEN)   
         game.run_tick()
 
-        # for dinosaur_presenter in dinosaur_presenters:
-        #     dinosaur_presenter.draw(screen)
         entity_presenter.draw(screen)
 
         pygame.display.flip()

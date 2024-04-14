@@ -22,8 +22,11 @@ class Position():
     def to_coords(self):
         return (self.x, self.y)
 
-    def distance(self, other) -> float:
-        return ((self.x - other.x) ** 2 + (self.y - other.y) ** 2) ** (1 / 2)
+    def distance(self, other=None) -> float:
+        if other != None:
+            return ((self.x - other.x)**2 + (self.y - other.y)**2)**(1/2)
+        else:
+            return (self.x**2 + self.y**2)**(1/2)
 
     def normalized(self):
         if self.x == 0 and self.y == 0:
@@ -31,7 +34,7 @@ class Position():
         else:
             dis = self.distance(Position(0, 0))
             self.x /= dis
-            self.y /= dis
+
     def proceeding(self, other):
         if self.x <= other.x and self.y <= other.y:
             return True
@@ -42,3 +45,4 @@ class Position():
             return True
         else:
             return False
+

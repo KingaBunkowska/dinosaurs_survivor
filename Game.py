@@ -6,7 +6,6 @@ from game_mechanics.Attack import Attack
 from game_mechanics.Position import Position
 import pygame
 
-
 class Game:
     def __init__(self, screen):
         self.player = Player()
@@ -78,3 +77,9 @@ class Game:
             self.projectiles_presenters.append(Attack_preseter(projectile))
         else:
             print(" Ludzie, przecież tu nikogo nie ma. Nikt nie atakuje Jasnej Góry. Co wy pierd****** za głupoty!")
+
+
+    def _add_dinosaur(self, dinosaur:Dinosaur) -> None:
+        self.dinosaurs.append(dinosaur)
+        self.dinosaur_presenters.append(Entity_preseter(dinosaur, dino=True, width=200, height=200))
+
