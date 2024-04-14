@@ -1,2 +1,11 @@
 /.conda
 /.vscode
+# Ignore PyCharm files
+.idea/
+
+# Ignore PyCharm caches
+*.iml
+*.ipr
+*.iws
+*.pyc
+__pycache__/
