@@ -19,8 +19,8 @@ class Position():
     def __str__(self):
         return f"({self.x}, {self.y})"
 
-    def to_coords(self):
-        return (self.x, self.y)
+    def to_coords(self, width=0, height=0):
+        return (self.x - width/2, self.y - height/2)
 
     def distance(self, other=None) -> float:
         if other != None:
