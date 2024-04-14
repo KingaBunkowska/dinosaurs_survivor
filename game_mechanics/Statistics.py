@@ -4,3 +4,4 @@ class Statistics:
 
     def changed_by(self, speed = 0):
         return Statistics(self.speed + speed)
+

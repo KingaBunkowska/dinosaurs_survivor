@@ -7,6 +7,7 @@ import random
 class Dinosaur(Entity):
     def __init__(self, type = Dinosaur_type.STEGOSAUR , friendly = False, position=Position(100, 100)):
         super().__init__(statistics = type.value["statistics"].changed_by(speed = random.normalvariate(0, 0.1)), position=position)
+
         self.type = type
         self.ally = friendly
 

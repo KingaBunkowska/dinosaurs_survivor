@@ -27,6 +27,7 @@ class Entity_preseter:
 
     def draw(self, screen):
         if self.image != None:
+
             if self.entity.facing_right:
                 rotated_image = pygame.transform.flip(self.image, True, False)
                 screen.blit(rotated_image, self.entity.position.to_coords())
@@ -38,3 +39,4 @@ class Entity_preseter:
 
     def get_entity(self):
         return self.entity
+

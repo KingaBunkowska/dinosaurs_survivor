@@ -9,13 +9,13 @@ class Position():
 
     def __sub__(self, other):
         return Position(self.x - other.x, self.y - other.y)
-    
+
     def __pow__(self, exponent):
         return Position(self.x ** exponent, self.y ** exponent)
 
-    def __mul__(self, value:int):
+    def __mul__(self, value: int):
         return Position(self.x * value, self.y * value)
-    
+
     def __str__(self):
         return f"({self.x}, {self.y})"
 
@@ -34,4 +34,15 @@ class Position():
         else:
             dis = self.distance(Position(0, 0))
             self.x /= dis
-            self.y /= dis
+
+    def proceeding(self, other):
+        if self.x <= other.x and self.y <= other.y:
+            return True
+        else:
+            return False
+    def following(self, other):
+        if self.x >= other.x and self.y >= other.y:
+            return True
+        else:
+            return False
+
