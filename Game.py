@@ -4,7 +4,6 @@ from gui.Entity_presenter import Entity_preseter
 from gui. Attack_presenter import Attack_preseter
 from game_mechanics.Attack import Attack
 from game_mechanics.Position import Position
-import pygame
 
 class Game:
     def __init__(self, screen):
@@ -21,6 +20,7 @@ class Game:
         for dinosaur in self.dinosaurs:
             dinosaur.move(self.player.position)
 
+        self.dinosaur_presenters.sort(key = lambda presenter: presenter.get_entity().get_position().to_coords()[1])
         for presenter in self.dinosaur_presenters:
             presenter.draw(self.screen)
 

@@ -32,14 +32,16 @@ class Position():
         if self.x == 0 and self.y == 0:
             return Position(0, 0)
         else:
-            dis = self.distance(Position(0, 0))
+            dis = self.distance()
             self.x /= dis
+            self.y /= dis
 
     def proceeding(self, other):
         if self.x <= other.x and self.y <= other.y:
             return True
         else:
             return False
+        
     def following(self, other):
         if self.x >= other.x and self.y >= other.y:
             return True

@@ -37,14 +37,14 @@ def handle_player_input():
     if keys[pygame.K_a]:
         x -= 1
     if keys[pygame.K_d]:
-
         x += 1
 
     game.player.move(Position(x, y))
+
 dev_mode = 0
 
 if __name__ == "__main__":
-    FPS = 60
+    FPS = 45
     clock = pygame.time.Clock()
     pygame.init()
     
