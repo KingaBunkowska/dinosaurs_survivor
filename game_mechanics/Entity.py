@@ -11,11 +11,13 @@ class Entity:
     def move(self, move_vector:Position):
         move_vector.normalized()
         move_vector *= self.statistics.speed
+
         self.position += move_vector
-        if move_vector.to_coords()[0] > 0:
+        
+        if move_vector.to_coords()[0] > 10**-3:
             self.facing_right = True
         else:
             self.facing_right = False
-    
+        
     def get_position(self):
         return self.position
