@@ -14,6 +14,7 @@ class Game:
         for dinosaur in self.dinosaurs:
             dinosaur.move(self.player.position)
 
+        self.dinosaur_presenters.sort(key = lambda presenter: presenter.get_entity().get_position().to_coords()[1])
         for presenter in self.dinosaur_presenters:
             presenter.draw(self.screen)
 

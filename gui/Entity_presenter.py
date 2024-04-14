@@ -32,3 +32,5 @@ class Entity_preseter:
             # delete when having image of the character
             pygame.draw.rect(screen, self.color, pygame.Rect(self.entity.position.to_coords(), [self.width, self.height]))
 
+    def get_entity(self):
+        return self.entity

@@ -11,3 +11,6 @@ class Entity:
         move_vector.normalized()
         move_vector *= self.statistics.speed
         self.position += move_vector
+    
+    def get_position(self):
+        return self.position
