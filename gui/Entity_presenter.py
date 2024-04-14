@@ -27,7 +27,11 @@ class Entity_preseter:
 
     def draw(self, screen):
         if self.image != None:
-            screen.blit(self.image, self.entity.position.to_coords())
+            if self.entity.facing_right:
+                rotated_image = pygame.transform.flip(self.image, True, False)
+                screen.blit(rotated_image, self.entity.position.to_coords())
+            else:
+                screen.blit(self.image, self.entity.position.to_coords())
         else:
             # delete when having image of the character
             pygame.draw.rect(screen, self.color, pygame.Rect(self.entity.position.to_coords(), [self.width, self.height]))
