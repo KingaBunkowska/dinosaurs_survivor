@@ -1,6 +1,6 @@
 import pygame
 from game_mechanics.Dinosaur import Dinosaur
-from gui.Entity_presenter import Entity_preseter
+from gui.Entity_presenter import Entity_presenter
 from game_mechanics.Position import Position
 from Game import Game
 
@@ -24,7 +24,6 @@ def handle_events():
             game._add_dinosaur(Dinosaur(position=Position(*event.pos)))
         if dev_mode == 0 and event.type == pygame.MOUSEBUTTONDOWN:
             game.player_attack()
-
 
 def handle_player_input():
     keys = pygame.key.get_pressed()
@@ -58,8 +57,6 @@ if __name__ == "__main__":
     game = Game(screen)
     running = True
 
-    entity_presenter = Entity_preseter(game.player, width = 25, height = 50)
-
 
     GREEN = (0, 153, 51)
 
@@ -72,7 +69,5 @@ if __name__ == "__main__":
 
         screen.fill(GREEN)   
         game.run_tick()
-
-        entity_presenter.draw(screen)
 
         pygame.display.flip()

@@ -1,6 +1,7 @@
 from game_mechanics.Player import Player
 from game_mechanics.Dinosaur import Dinosaur
-from gui.Entity_presenter import Entity_preseter
+from gui.Player_presenter import Player_presenter
+from gui.Dinosaur_presenter import Dinosaur_presenter
 from gui. Attack_presenter import Attack_preseter
 from game_mechanics.Attack import Attack
 from game_mechanics.Position import Position
@@ -13,6 +14,7 @@ class Game:
         self.screen = screen
         self.projectiles = []
         self.projectiles_presenters = []
+        self.player_presenter = Player_presenter(self.player)
 
     def run_tick(self):
         self.check_colisions()
@@ -20,7 +22,9 @@ class Game:
         for dinosaur in self.dinosaurs:
             dinosaur.move(self.player.position)
 
-        self.dinosaur_presenters.sort(key = lambda presenter: presenter.get_entity().get_position().to_coords()[1])
+        self.player_presenter.draw(self.screen)
+
+        self.dinosaur_presenters.sort(key = lambda presenter: presenter._get_entity().get_position().to_coords()[1])
         for presenter in self.dinosaur_presenters:
             presenter.draw(self.screen)
 
@@ -30,7 +34,8 @@ class Game:
         for presenter in self.projectiles_presenters:
             presenter.draw(self.screen)
 
-    def compare_hitbox(self,rect1,rect2):
+
+    def compare_hitbox(self, rect1, rect2):
         """
         Function tells whether rectangles 1 and 2 colide
         :param rect1: First rectangle
@@ -63,10 +68,9 @@ class Game:
                     to_del.append(i)
         self.projectiles_presenters = [p for i, p in enumerate(self.projectiles_presenters) if i not in to_del]
 
-
     def _add_dinosaur(self, dinosaur: Dinosaur) -> None:
         self.dinosaurs.append(dinosaur)
-        self.dinosaur_presenters.append(Entity_preseter(dinosaur, dino=True, width=200, height=200))
+        self.dinosaur_presenters.append(Dinosaur_presenter(dinosaur, self.player))
 
     def player_attack(self) -> None:
         if self.dinosaurs:
@@ -77,9 +81,3 @@ class Game:
             self.projectiles_presenters.append(Attack_preseter(projectile))
         else:
             print(" Ludzie, przecież tu nikogo nie ma. Nikt nie atakuje Jasnej Góry. Co wy pierd****** za głupoty!")
-
-
-    def _add_dinosaur(self, dinosaur:Dinosaur) -> None:
-        self.dinosaurs.append(dinosaur)
-        self.dinosaur_presenters.append(Entity_preseter(dinosaur, dino=True, width=200, height=200))
-
