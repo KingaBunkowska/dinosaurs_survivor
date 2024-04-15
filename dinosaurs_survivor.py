@@ -22,8 +22,6 @@ def handle_events():
                     print("Dev mode deactivated")
         if dev_mode == 1 and event.type == pygame.MOUSEBUTTONDOWN:
             game._add_dinosaur(Dinosaur(position=Position(*event.pos)))
-        if dev_mode == 0 and event.type == pygame.MOUSEBUTTONDOWN:
-            game.player_attack()
 
 def handle_player_input():
     keys = pygame.key.get_pressed()
@@ -41,11 +39,12 @@ def handle_player_input():
     game.player.move(Position(x, y))
 
 dev_mode = 0
-
 if __name__ == "__main__":
     FPS = 45
     clock = pygame.time.Clock()
     pygame.init()
+
+    
     
 
     # screen_width, screen_height = pygame.display.Info().current_w, pygame.display.Info().current_h
