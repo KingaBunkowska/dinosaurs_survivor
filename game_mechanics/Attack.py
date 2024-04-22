@@ -20,7 +20,7 @@ class Attack:
         :param range: range of attack
         :type range: float
 
-        :param penetrate: whether projectile pierce enemy or not (TODO: implement piercing)
+        :param penetrate: whether projectile pierce enemy or not TODO: implement piercing
         :type penetrate: bool
         """
         self.position = caster.position
@@ -31,6 +31,7 @@ class Attack:
         self.penetrate = penetrate
         self.range = range
         self.speed = speed
+        self.attacked = set()
 
 
     def calculate_dammage(self):

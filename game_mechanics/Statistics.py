@@ -6,8 +6,5 @@ class Statistics:
         self.attack_speed = 100.
         self.critical_chance = 10.
         self.critical_multiplier = 0.
-
-
     def changed_by(self, speed = 0):
         return Statistics(self.speed + speed)
-

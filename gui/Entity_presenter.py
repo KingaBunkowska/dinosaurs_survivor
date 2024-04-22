@@ -20,7 +20,7 @@ class Entity_presenter:
         else:
             screen.blit(self.image,  self.entity.get_position().to_coords(*self.size))
         # draw hitbox
-        # pygame.draw.rect(screen,(255,0,0),(self.hitbox[0].to_coords(), self.size),2)
+        pygame.draw.rect(screen,(255,0,0),(self.hitbox[0].to_coords(), self.size),2)
 
     def _get_entity(self):
         return self.entity
