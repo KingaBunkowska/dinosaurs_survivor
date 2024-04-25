@@ -38,6 +38,8 @@ class Game:
 
         self.player_presenter.draw(self.screen)
 
+        self.dinosaur_presenters.sort(key=lambda presenter: presenter._get_entity().get_position().to_coords()[1])
+
         for presenter in self.dinosaur_presenters:
             presenter.draw(self.screen)
 
