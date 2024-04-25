@@ -5,7 +5,6 @@ class Entity:
         self.statistics = statistics
         self.position = position
 
-        self.hitbox = (self.position.x + 20, self.position.y, 28, 60)
         self.facing_right = False
 
 
@@ -20,9 +19,8 @@ class Entity:
             self.facing_right = False
 
         
-    def hit(self, projectile):
-        if (self != projectile.caster):
-            pass
+    def _receive_damage(self, damage):
+        self.statistics.hp -= damage
         
     def get_position(self):
         return self.position

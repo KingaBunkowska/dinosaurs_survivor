@@ -6,24 +6,32 @@ class Attack:
     superclass for any form of attack
     """
 
-    def __init__(self, target, caster):
+    def __init__(self, target, caster,speed = 8,range = float('inf'), penetrate=False):
         """
-        Initialize a new instance of Attack.
-
-        :param target: the target location
+        :param target: coordinates of target
         :type target: Position
 
-        :param caster: entity who threw an attack
-        :type caster: entity
+        :param caster: casting entity
+        :type caster: Entity
 
-        :param position: current position of the attack
-        :type position: Position
+        :param speed: speed of attack
+        :type speed: float
+
+        :param range: range of attack
+        :type range: float
+
+        :param penetrate: whether projectile pierce enemy or not TODO: implement piercing
+        :type penetrate: bool
         """
         self.position = caster.position
 
         #
         self.angle, self.direction = self.calculate_angle(target)
         self.caster = caster
+        self.penetrate = penetrate
+        self.range = range
+        self.speed = speed
+        self.attacked = set()
 
 
     def calculate_dammage(self):
@@ -32,7 +40,7 @@ class Attack:
         :return: The calculated damage output.
         :rtype: float
         """
-        # TODO : system of statistics to come up with
+        # TODO : connect to the statistics system
         return 1. #PLACEHOLDER
     def calculate_angle(self,target):
         """
@@ -49,10 +57,7 @@ class Attack:
         return math.degrees(math.atan2(-vector.y, vector.x)), vector
     def fly(self):
         """
-        Move projectile with speed ...
+        Move projectile in space and reduce remaining range
         """
-        self.position += (self.direction * 3 ) #PLACEHOLDER
-
-
-
-
+        self.position += (self.direction * self.speed)
+        self.range -= self.speed
