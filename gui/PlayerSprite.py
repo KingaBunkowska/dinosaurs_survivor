@@ -1,10 +1,10 @@
-from gui.Entity_presenter import Entity_presenter
+from gui.EntitySprite import EntitySprite
 from game_mechanics.Player import Player
 from game_mechanics.Position import Position
 import pygame
 
 
-class Player_presenter(Entity_presenter):
+class PlayerSprite(EntitySprite):
     def __init__(self, player:Player):
         super().__init__(player, None)
 

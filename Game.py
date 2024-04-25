@@ -1,8 +1,8 @@
 from game_mechanics.Player import Player
 from game_mechanics.Dinosaur import Dinosaur
-from gui.Player_presenter import Player_presenter
-from gui.Dinosaur_presenter import Dinosaur_presenter
-from gui. Attack_presenter import Attack_preseter
+from gui.PlayerSprite import PlayerSprite
+from gui.DinosaurSprite import DinosaurSprite
+from gui.AttackSprite import AttackSprite
 from game_mechanics.Attack import Attack
 from game_mechanics.Position import Position
 from game_mechanics.Weapon import Weapon
@@ -10,10 +10,10 @@ from game_mechanics.Weapon import Weapon
 class Game:
     def __init__(self, screen):
         self.player = Player()
-        self.dinosaur_presenters = []
+        self.dinosaur_sprites = []
         self.screen = screen
-        self.projectiles_presenters = []
-        self.player_presenter = Player_presenter(self.player)
+        self.projectiles_sprites = []
+        self.player_presenter = PlayerSprite(self.player)
         self.attack_interval = 0
         self.invincibility_frames = 100
         self.weapon = Weapon(self.player)
@@ -29,29 +29,29 @@ class Game:
         self.check_collisions()
 
 
-        for i,dinosaur in enumerate(self.dinosaur_presenters):
+        for i,dinosaur in enumerate(self.dinosaur_sprites):
             dinosaur.entity.move(self.player.position)
             if dinosaur.entity.statistics.hp <= 0:
-                self.dinosaur_presenters[i] = None
+                self.dinosaur_sprites[i] = None
         # remove dinosaurs that disappeared
-        self.dinosaur_presenters = [d for d in self.dinosaur_presenters if d != None]
+        self.dinosaur_sprites = [d for d in self.dinosaur_sprites if d != None]
 
         self.player_presenter.draw(self.screen)
 
-        self.dinosaur_presenters.sort(key=lambda presenter: presenter._get_entity().get_position().to_coords()[1])
+        self.dinosaur_sprites.sort(key=lambda presenter: presenter._get_entity().get_position().to_coords()[1])
 
-        for presenter in self.dinosaur_presenters:
+        for presenter in self.dinosaur_sprites:
             presenter.draw(self.screen)
 
-        for i, projectile in enumerate(self.projectiles_presenters):
+        for i, projectile in enumerate(self.projectiles_sprites):
             if projectile.attack.range <= 0:
-                self.projectiles_presenters[i] = None
+                self.projectiles_sprites[i] = None
             else:
                 projectile.attack.fly()
-        # remove projectiles that disappeared/
-        self.projectiles_presenters = [p for p in self.projectiles_presenters if p != None]
+        # remove projectiles that disappeared
+        self.projectiles_sprites = [p for p in self.projectiles_sprites if p != None]
 
-        for presenter in self.projectiles_presenters:
+        for presenter in self.projectiles_sprites:
             presenter.draw(self.screen)
 
     def compare_hitbox(self, colision_point, hitbox):
@@ -71,7 +71,7 @@ class Game:
         """
         Check whether any projectile or Player hit any Dinosaur
         """
-        for dinosaur in self.dinosaur_presenters:
+        for dinosaur in self.dinosaur_sprites:
             rect1 = dinosaur.hitbox
             rect2 = self.player_presenter.hitbox
             if not (rect1[0].x > rect2[1].x or rect2[0].x > rect1[1].x or
@@ -82,23 +82,24 @@ class Game:
 
         to_del = []
 
-        for i,projectiles_presenter in enumerate(self.projectiles_presenters):
-            for dinosaur in self.dinosaur_presenters:
+        for i,projectiles_presenter in enumerate(self.projectiles_sprites):
+            for dinosaur in self.dinosaur_sprites:
                 if (self.compare_hitbox(projectiles_presenter.colision_point, dinosaur.hitbox) and not
                 projectiles_presenter.attack.penetrate):
                     dinosaur.entity._receive_damage(projectiles_presenter.attack.calculate_dammage())
                     to_del.append(i)
                     break
-        self.projectiles_presenters = [p for i, p in enumerate(self.projectiles_presenters) if i not in to_del]
+        self.projectiles_sprites = [p for i, p in enumerate(self.projectiles_sprites) if i not in to_del]
+
     def _add_dinosaur(self, dinosaur: Dinosaur) -> None:
-        self.dinosaur_presenters.append(Dinosaur_presenter(dinosaur, self.player))
+        self.dinosaur_sprites.append(DinosaurSprite(dinosaur, self.player))
 
     def player_attack(self) -> None:
         """
         Use current weapon to generate projectiles and add them to view.
         """
-        if self.dinosaur_presenters:
-            nearest_dinosaur = min(self.dinosaur_presenters, key=lambda dino: self.player.position.distance(dino.entity.position))
+        if self.dinosaur_sprites:
+            nearest_dinosaur = min(self.dinosaur_sprites, key=lambda dino: self.player.position.distance(dino.entity.position))
 
             projectiles = self.weapon.fire_attack(nearest_dinosaur.entity.position)
-            self.projectiles_presenters += [Attack_preseter(p) for p in projectiles]
+            self.projectiles_sprites += [AttackSprite(p) for p in projectiles]

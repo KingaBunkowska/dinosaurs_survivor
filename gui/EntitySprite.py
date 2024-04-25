@@ -2,7 +2,7 @@ from game_mechanics.Entity import Entity
 from game_mechanics.Position import Position
 import pygame
 
-class Entity_presenter:
+class EntitySprite:
     def __init__(self, entity:Entity, image):
         self.entity = entity
         self.size, _ = image.get_size() if image!=None else (25,25), 50

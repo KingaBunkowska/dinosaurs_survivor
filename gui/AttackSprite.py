@@ -2,7 +2,7 @@ from game_mechanics.Attack import Attack
 from game_mechanics.Position import Position
 import pygame
 
-class Attack_preseter:
+class AttackSprite:
     """
     Pygame presenter for Attack class
     """
