@@ -1,8 +1,8 @@
 import pygame
 from game_mechanics.Dinosaur import Dinosaur
-from gui.Entity_presenter import Entity_presenter
 from game_mechanics.Position import Position
 from Game import Game
+from utils.ImageLoader import ImageLoader
 
 def handle_events():
     global running, dev_mode
@@ -44,8 +44,7 @@ if __name__ == "__main__":
     clock = pygame.time.Clock()
     pygame.init()
 
-    
-    
+    imageL = ImageLoader()
 
     # screen_width, screen_height = pygame.display.Info().current_w, pygame.display.Info().current_h
     screen_width, screen_height = 1360, 748
