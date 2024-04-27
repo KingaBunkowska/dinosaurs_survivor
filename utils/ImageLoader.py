@@ -39,7 +39,6 @@ class ImageLoader():
                         for file_name in os.listdir(os.path.join(path, entity_type, alignment)):
                             if __is_png_file(os.path.join(path, entity_type, alignment, file_name)):
                                 dict_list.append(pygame.image.load(os.path.join(path, entity_type, alignment, file_name)))
-                                print(file_name)
 
                         if len(dict_list) == 0:
                             raise ImagesNotFoundException("Cannot find images for"+ alignment +"of" + entity_type)

@@ -3,13 +3,15 @@ from game_mechanics.Dinosaur import Dinosaur
 from game_mechanics.Position import Position
 from Game import Game
 from utils.ImageLoader import ImageLoader
+import random
+from game_mechanics.DinosaurType import DinosaurType
 
 def handle_events():
     global running, dev_mode
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        # for now esc button will close the game without aany confirmation
+        # for now esc button will close the game without any confirmation
         elif event.type == pygame.KEYDOWN:
             keys = pygame.key.get_pressed()
             if keys[pygame.K_ESCAPE]:
@@ -21,7 +23,7 @@ def handle_events():
                 else:
                     print("Dev mode deactivated")
         if dev_mode == 1 and event.type == pygame.MOUSEBUTTONDOWN:
-            game._add_dinosaur(Dinosaur(position=Position(*event.pos)))
+            game._add_dinosaur(Dinosaur(type=random.choice(list(DinosaurType)), position=Position(*event.pos)))
 
 def handle_player_input():
     keys = pygame.key.get_pressed()
