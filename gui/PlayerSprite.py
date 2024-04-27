@@ -6,7 +6,7 @@ import pygame
 
 class PlayerSprite(EntitySprite):
     def __init__(self, player:Player):
-        super().__init__(player, None)
+        super().__init__(player, None, hitbox_size=(50, 100))
 
     def draw(self, screen):
         self.hitbox = (Position(self.entity.position.x - self.size[0] / 2, self.entity.position.y - self.size[1] / 2),

@@ -55,11 +55,9 @@ if __name__ == "__main__":
     game = Game(screen)
     running = True
 
-
     GREEN = (0, 153, 51)
 
     while running:
-
         clock.tick(FPS)
 
         handle_events()
