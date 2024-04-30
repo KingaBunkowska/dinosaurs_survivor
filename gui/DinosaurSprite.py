@@ -10,3 +10,4 @@ class DinosaurSprite(EntitySprite):
         image = pygame.transform.scale(ImageLoader.random_dinosaur_sprite(dinosaur.type, "ally" if dinosaur.ally else "enemy"), ImageLoader.get_dinosaur_image_size(dinosaur.type))
         super().__init__(dinosaur, image, hitbox_size=ImageLoader.get_dinosaur_hitbox_size(dinosaur.type), hitbox_start=ImageLoader.get_dinosaur_hitbox_start(dinosaur.type))
         self.player = player
+        self.dinosaur = dinosaur

@@ -11,7 +11,13 @@ class Dinosaur(Entity):
         self.type = type
         self.ally = friendly
 
-    def move(self, player_position:Position):
+    def move(self, player_position:Position, dinosaurs):
         if not self.ally:
             move_vector = player_position - self.position
-            super().move(move_vector)
+        else:
+            if dinosaurs:
+                move_vector = min(dinosaurs, key = lambda dino: self.position.distance(dino.position)).position - self.position
+            else: 
+                move_vector = Position(0, 0)
+
+        super().move(move_vector)

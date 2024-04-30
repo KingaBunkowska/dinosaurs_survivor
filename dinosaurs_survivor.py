@@ -24,6 +24,8 @@ def handle_events():
                     print("Dev mode deactivated")
         if dev_mode == 1 and event.type == pygame.MOUSEBUTTONDOWN:
             game._add_dinosaur(Dinosaur(type=random.choice(list(DinosaurType)), position=Position(*event.pos)))
+        elif dev_mode == 1 and event.type == pygame.KEYUP and event.key == pygame.K_t:
+            game._add_dinosaur(Dinosaur(type=random.choice(list(DinosaurType)), position=Position(*pygame.mouse.get_pos()), friendly=True))
 
 def handle_player_input():
     keys = pygame.key.get_pressed()
