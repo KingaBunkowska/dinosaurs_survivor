@@ -1,15 +1,17 @@
-import pygame
 from game_mechanics.Dinosaur import Dinosaur
-from gui.Entity_presenter import Entity_presenter
 from game_mechanics.Position import Position
 from Game import Game
+from utils.ImageLoader import ImageLoader
+import random
+from game_mechanics.DinosaurType import DinosaurType
+import pygame
 
 def handle_events():
     global running, dev_mode
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        # for now esc button will close the game without aany confirmation
+        # for now esc button will close the game without any confirmation
         elif event.type == pygame.KEYDOWN:
             keys = pygame.key.get_pressed()
             if keys[pygame.K_ESCAPE]:
@@ -21,7 +23,9 @@ def handle_events():
                 else:
                     print("Dev mode deactivated")
         if dev_mode == 1 and event.type == pygame.MOUSEBUTTONDOWN:
-            game._add_dinosaur(Dinosaur(position=Position(*event.pos)))
+            game._add_dinosaur(Dinosaur(type=random.choice(list(DinosaurType)), position=Position(*event.pos)))
+        elif dev_mode == 1 and event.type == pygame.KEYUP and event.key == pygame.K_t:
+            game._add_dinosaur(Dinosaur(type=random.choice(list(DinosaurType)), position=Position(*pygame.mouse.get_pos()), friendly=True))
 
 def handle_player_input():
     keys = pygame.key.get_pressed()
@@ -44,8 +48,7 @@ if __name__ == "__main__":
     clock = pygame.time.Clock()
     pygame.init()
 
-    
-    
+    imageL = ImageLoader()
 
     # screen_width, screen_height = pygame.display.Info().current_w, pygame.display.Info().current_h
     screen_width, screen_height = 1360, 748
@@ -56,11 +59,9 @@ if __name__ == "__main__":
     game = Game(screen)
     running = True
 
-
     GREEN = (0, 153, 51)
 
     while running:
-
         clock.tick(FPS)
 
         handle_events()

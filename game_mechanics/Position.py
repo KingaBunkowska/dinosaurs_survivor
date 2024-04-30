@@ -18,6 +18,11 @@ class Position():
 
     def __str__(self):
         return f"({self.x}, {self.y})"
+    
+    def __lt__(self, other):
+        if isinstance(other, Position):
+            return -1
+        return self.x < other.x
 
     def to_coords(self, width=0, height=0):
         return (self.x - width/2, self.y - height/2)
