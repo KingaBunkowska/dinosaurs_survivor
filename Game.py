@@ -17,6 +17,7 @@ class Game:
         self.attack_interval = 0
         self.invincibility_frames = 100
         self.weapon = Weapon(self.player)
+        self.time_of_contact_damage = 10
 
     def run_tick(self):
         self.player._use_up_invincibility()
@@ -33,10 +34,10 @@ class Game:
         enemy_dinosaurs = [dinosaur_sprite for dinosaur_sprite in self.dinosaur_sprites if not dinosaur_sprite.dinosaur.ally]
 
         for i, dino in enumerate(self.dinosaur_sprites):
-            dino.entity.move(self.player.position, [dino_sprite.dinosaur for dino_sprite in enemy_dinosaurs])
-            if dino.entity.statistics.hp <= 0:
-                self.dinosaur_sprites[i] = None
-                self.dinosaur_sprites = [d for d in self.dinosaur_sprites if d != None]
+            if dino is not None:
+                dino.entity.move(self.player.position, [dino_sprite.dinosaur for dino_sprite in enemy_dinosaurs])
+                if dino.entity.statistics.hp <= 0:
+                    self.dinosaur_sprites[i] = None
 
 
         # remove dinosaurs that disappeared
@@ -80,6 +81,7 @@ class Game:
         """
 
         enemy_sprites = [dino_sprite for dino_sprite in self.dinosaur_sprites if not dino_sprite.dinosaur.ally]
+        ally_sprites = [dino_sprite for dino_sprite in self.dinosaur_sprites if dino_sprite.dinosaur.ally]
 
         for dinosaur in enemy_sprites:
             if dinosaur.dinosaur.ally == False:
@@ -87,13 +89,29 @@ class Game:
                 rect2 = self.player_sprite.hitbox
                 if not (rect1[0].x > rect2[1].x or rect2[0].x > rect1[1].x or
                         rect1[0].y > rect2[1].y or rect2[0].y > rect1[1].y):
-                    self.player._receive_damage(dinosaur.entity.statistics.contact_damage,self.invincibility_frames)
+                    self.player._receive_damage(dinosaur.entity.statistics.contact_damage, self.invincibility_frames)
                     dinosaur.entity._receive_damage(self.player.statistics.contact_damage)
                     break
 
+        self.time_of_contact_damage += 1
+        if self.time_of_contact_damage % 40 == 0:
+        
+            for ally_sprite in ally_sprites:
+                rect1 = ally_sprite.hitbox
+
+                dinosaurs_hitted = 0
+                
+                for enemy_sprite in enemy_sprites:
+                    rect2 = enemy_sprite.hitbox
+                    if (not (rect1[0].x > rect2[1].x or rect2[0].x > rect1[1].x or
+                            rect1[0].y > rect2[1].y or rect2[0].y > rect1[1].y) and
+                            dinosaurs_hitted<3):
+                        dinosaurs_hitted += 1
+                        enemy_sprite.dinosaur._receive_damage(ally_sprite.dinosaur.statistics.contact_damage)
+
         to_del = []
 
-        for i,projectiles_presenter in enumerate(self.projectiles_sprites):
+        for i, projectiles_presenter in enumerate(self.projectiles_sprites):
             for dinosaur in enemy_sprites:
                 if (self.compare_hitbox(projectiles_presenter.colision_point, dinosaur.hitbox) and not projectiles_presenter.attack.penetrate):
                     dinosaur.entity._receive_damage(projectiles_presenter.attack.calculate_dammage())

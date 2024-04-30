@@ -4,7 +4,6 @@ class Entity:
     def __init__(self, statistics = None, position = Position(200, 200), facing_right=False):
         self.statistics = statistics
         self.position = position
-
         self.original_facing_right = facing_right
         self.facing_right = facing_right
 
@@ -19,10 +18,9 @@ class Entity:
         else:
             self.facing_right = self.original_facing_right
 
-        
     def _receive_damage(self, damage):
         self.statistics.hp -= damage
-        
+
     def get_position(self):
         return self.position
 
