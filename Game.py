@@ -29,19 +29,13 @@ class Game:
             self.player_attack()
         self.check_collisions()
 
-        self.dinosaur_sprites = [d for d in self.dinosaur_sprites if d != None]
-
         enemy_dinosaurs = [dinosaur_sprite for dinosaur_sprite in self.dinosaur_sprites if not dinosaur_sprite.dinosaur.ally]
 
         for i, dino in enumerate(self.dinosaur_sprites):
-            if dino is not None:
-                dino.entity.move(self.player.position, [dino_sprite.dinosaur for dino_sprite in enemy_dinosaurs])
-                if dino.entity.statistics.hp <= 0:
-                    self.dinosaur_sprites[i] = None
+            dino.entity.move(self.player.position, [dino_sprite.dinosaur for dino_sprite in enemy_dinosaurs])
 
+        self.dinosaur_sprites = [dinosaur_sprite for dinosaur_sprite in self.dinosaur_sprites if dinosaur_sprite.dinosaur.statistics.hp >= 0]
 
-        # remove dinosaurs that disappeared
-        self.dinosaur_sprites = [d for d in self.dinosaur_sprites if d != None]
 
         self.player_sprite.draw(self.screen)
 

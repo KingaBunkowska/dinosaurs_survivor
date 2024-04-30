@@ -1,10 +1,10 @@
-import pygame
 from game_mechanics.Dinosaur import Dinosaur
 from game_mechanics.Position import Position
 from Game import Game
 from utils.ImageLoader import ImageLoader
 import random
 from game_mechanics.DinosaurType import DinosaurType
+import pygame
 
 def handle_events():
     global running, dev_mode
