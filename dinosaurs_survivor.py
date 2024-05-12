@@ -1,4 +1,5 @@
 from game_mechanics.Dinosaur import Dinosaur
+from gui.EntitySprite import EntitySprite
 from game_mechanics.Position import Position
 from Game import Game
 from utils.ImageLoader import ImageLoader
@@ -44,10 +45,9 @@ def handle_player_input():
 
 dev_mode = 0
 if __name__ == "__main__":
-    FPS = 45
+    FPS = 60
     clock = pygame.time.Clock()
     pygame.init()
-
     imageL = ImageLoader()
 
     # screen_width, screen_height = pygame.display.Info().current_w, pygame.display.Info().current_h

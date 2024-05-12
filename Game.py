@@ -6,6 +6,8 @@ from gui.AttackSprite import AttackSprite
 from game_mechanics.Attack import Attack
 from game_mechanics.Position import Position
 from game_mechanics.Weapon import Weapon
+from game_mechanics.Coin import Coin
+from gui.PickableItemSprite import PickableItemSprite
 
 class Game:
     def __init__(self, screen):
@@ -14,6 +16,7 @@ class Game:
         self.screen = screen
         self.projectiles_sprites = []
         self.player_sprite = PlayerSprite(self.player)
+        self.coin_sprites = []
         self.attack_interval = 0
         self.invincibility_frames = 100
         self.weapon = Weapon(self.player)
@@ -31,8 +34,13 @@ class Game:
 
         enemy_dinosaurs = [dinosaur_sprite for dinosaur_sprite in self.dinosaur_sprites if not dinosaur_sprite.dinosaur.ally]
 
-        for i, dino in enumerate(self.dinosaur_sprites):
+        for i,dinosaur in enumerate(self.dinosaur_sprites):
             dino.entity.move(self.player.position, [dino_sprite.dinosaur for dino_sprite in enemy_dinosaurs])
+            if dinosaur.entity.statistics.hp <= 0:
+                self.coin_sprites.append(dinosaur.entity.DropItems())
+                self.dinosaur_sprites[i] = None
+        # remove dinosaurs that disappeared
+        self.dinosaur_sprites = [d for d in self.dinosaur_sprites if d != None]
 
         self.dinosaur_sprites = [dinosaur_sprite for dinosaur_sprite in self.dinosaur_sprites if dinosaur_sprite.dinosaur.statistics.hp >= 0]
 
@@ -43,6 +51,14 @@ class Game:
 
         for presenter in self.dinosaur_sprites:
             presenter.draw(self.screen)
+
+        self.coin_sprites = [c for c in self.coin_sprites if c != None]
+
+        for coin in self.coin_sprites:
+            if self.player.position.distance(coin.item.position) <= self.player.statistics.pickup_range:
+                coin.item.move(self.player.position)
+            coin.draw(self.screen)
+
 
         for i, projectile in enumerate(self.projectiles_sprites):
             if projectile.attack.range <= 0:
@@ -59,9 +75,7 @@ class Game:
     def compare_hitbox(self, colision_point, hitbox):
         """
         Checks whether projectile collides with dinosaru
-        :param colision_point: "arrowhead" of projectile
         :type colision_point: Position
-        :param hitbox: two vertices(upper left and lower right) of dinosaur's collision rectangle
         :type hitbox: (Position, Position)
         :return:
         """
@@ -103,12 +117,16 @@ class Game:
                         dinosaurs_hitted += 1
                         enemy_sprite.dinosaur._receive_damage(ally_sprite.dinosaur.statistics.contact_damage)
 
-        to_del = []
+        for i,coin in enumerate(self.coin_sprites):
+            if self.compare_hitbox(coin.item.position,self.player_presenter.hitbox):
+                coin.item.onPick(self.player)
+                self.coin_sprites[i] = None
 
+        to_del = []
         for i, projectiles_presenter in enumerate(self.projectiles_sprites):
             for dinosaur in enemy_sprites:
                 if (self.compare_hitbox(projectiles_presenter.colision_point, dinosaur.hitbox) and not projectiles_presenter.attack.penetrate):
-                    dinosaur.entity._receive_damage(projectiles_presenter.attack.calculate_dammage())
+                    dinosaur.entity._receive_damage(projectiles_presenter.attack.calculate_dammage(dinosaur.entity)))
                     to_del.append(i)
                     break
         self.projectiles_sprites = [p for i, p in enumerate(self.projectiles_sprites) if i not in to_del]
