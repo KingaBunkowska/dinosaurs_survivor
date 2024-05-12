@@ -11,5 +11,5 @@ class Heal(ActiveAbility):
 
     def use(self):
         if self.can_use():
-            self.target.statistics.hp = min(self.target.statistics.hp + 5, self.target.statistics.max_hp)
+            self.target.statistics.hp = min(self.target.statistics.hp + self.target.statistics.max_hp * 0.5, self.target.statistics.max_hp)
             self.consume()
