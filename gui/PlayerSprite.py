@@ -6,7 +6,7 @@ import pygame
 
 class PlayerSprite(EntitySprite):
     def __init__(self, player:Player):
-        super().__init__(player, None)
+        super().__init__(player, None, hitbox_size=(50, 100))
 
     def draw(self, screen):
         self.hitbox = (Position(self.entity.position.x - self.size[0] / 2, self.entity.position.y - self.size[1] / 2),
@@ -15,6 +15,6 @@ class PlayerSprite(EntitySprite):
         width = 25
         height = 50
         if self.entity.invincibility % 10 < 5:
-            pygame.draw.rect(screen, color, pygame.Rect(super()._get_entity().get_position().to_coords(), [width, height]))
+            pygame.draw.rect(screen, color, pygame.Rect(super()._get_entity().position.to_coords(), [width, height]))
         #draw player hitbox
         # pygame.draw.rect(screen, (255, 255, 255), (self.hitbox[0].to_coords(), self.size), 2)
