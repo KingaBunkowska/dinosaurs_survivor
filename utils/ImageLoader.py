@@ -26,9 +26,10 @@ class ImageLoader():
             return path.lower().endswith('.png')
 
         try:
-            for entity_type in os.listdir(path):
-                directory_path = os.path.join(path, entity_type)
-                json_path = os.path.join(path, entity_type, "image_size.json")
+            dinosaurs_path = os.path.join(path, "dinosaurs")
+            for entity_type in os.listdir(dinosaurs_path):
+                directory_path = os.path.join(dinosaurs_path, entity_type)
+                json_path = os.path.join(dinosaurs_path, entity_type, "image_size.json")
                 if os.path.isdir(directory_path) and os.path.exists(json_path):
 
                     with open(json_path, "r") as json_path:
@@ -36,13 +37,39 @@ class ImageLoader():
 
                     for alignment in ["ally", "enemy"]:
                         dict_list = []
-                        for file_name in os.listdir(os.path.join(path, entity_type, alignment)):
-                            if __is_png_file(os.path.join(path, entity_type, alignment, file_name)):
-                                dict_list.append(pygame.image.load(os.path.join(path, entity_type, alignment, file_name)))
+                        for file_name in os.listdir(os.path.join(dinosaurs_path, entity_type, alignment)):
+                            if __is_png_file(os.path.join(dinosaurs_path, entity_type, alignment, file_name)):
+                                dict_list.append(pygame.image.load(os.path.join(dinosaurs_path, entity_type, alignment, file_name)))
 
                         if len(dict_list) == 0:
                             raise ImagesNotFoundException("Cannot find images for"+ alignment +"of" + entity_type)
                         images[(entity_type, alignment)] = dict_list
+
+            pickable_path = os.path.join(path,"pickable")
+            for item in os.listdir(pickable_path):
+                directory_path = os.path.join(pickable_path, item,"images")
+                json_path = os.path.join(pickable_path, item, "image_size.json")
+                if os.path.isdir(directory_path) and os.path.exists(json_path):
+
+                    with open(json_path, "r") as json_path:
+                        size = json.load(json_path)
+
+                    for file_name in os.listdir(directory_path):
+                        if __is_png_file(os.path.join(directory_path, file_name)):
+                            images[file_name[:-4]] = pygame.transform.scale(pygame.image.load(os.path.join(directory_path, file_name)),[size["image_height"],size["image_width"]])
+
+            pickable_path = os.path.join(path, "projectile")
+            for item in os.listdir(pickable_path):
+                directory_path = os.path.join(pickable_path, item, "images")
+                json_path = os.path.join(pickable_path, item, "image_size.json")
+                if os.path.isdir(directory_path) and os.path.exists(json_path):
+
+                    with open(json_path, "r") as json_path:
+                        size = json.load(json_path)
+
+                    for file_name in os.listdir(directory_path):
+                        if __is_png_file(os.path.join(directory_path, file_name)):
+                            images[file_name[:-4]] = pygame.transform.scale(pygame.image.load(os.path.join(directory_path, file_name)),[size["image_height"],size["image_width"]])
                 
 
         except OSError as e:
@@ -81,7 +108,21 @@ class ImageLoader():
         if (dinosaur_type.name.lower()) in sizes.keys():
             return sizes[dinosaur_type.name.lower()]["hitbox_start_x"], sizes[dinosaur_type.name.lower()]["hitbox_start_y"]
         
-        raise Exception("Stats for", dinosaur_type.name.lower(), "was not found")     
+        raise Exception("Stats for", dinosaur_type.name.lower(), "was not found")
+
+    @staticmethod
+    def get_pickable_sprite(item_name):
+        if (item_name) in images.keys():
+            return images.get(item_name)
+
+        raise ImagesNotFoundException("Image for", item_name, "was not found")
+
+    @staticmethod
+    def get_projectile_sprite(projectile_name):
+        if (projectile_name) in images.keys():
+            return images.get(projectile_name)
+
+        raise ImagesNotFoundException("Image for", projectile_name, "was not found")
 
 class ImagesNotFoundException(Exception):
     pass
