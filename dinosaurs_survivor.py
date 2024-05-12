@@ -27,6 +27,8 @@ def handle_events():
             game._add_dinosaur(Dinosaur(type=random.choice(list(DinosaurType)), position=Position(*event.pos)))
         elif dev_mode == 1 and event.type == pygame.KEYUP and event.key == pygame.K_t:
             game._add_dinosaur(Dinosaur(type=random.choice(list(DinosaurType)), position=Position(*pygame.mouse.get_pos()), friendly=True))
+        elif dev_mode == 1 and event.type == pygame.KEYUP and event.key == pygame.K_h:
+            game.player.increase_max_health(10)
 
 def handle_player_input():
     keys = pygame.key.get_pressed()

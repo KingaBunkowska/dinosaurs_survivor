@@ -1,6 +1,7 @@
 from game_mechanics.Player import Player
 from game_mechanics.Dinosaur import Dinosaur
 from game_mechanics.active_abilities.Dash import Dash
+from gui.HealthBar import HealthBar
 from gui.ActivatableRect import ActivatableRect
 from gui.PlayerSprite import PlayerSprite
 from gui.DinosaurSprite import DinosaurSprite
@@ -25,7 +26,9 @@ class Game:
         self.time_of_contact_damage = 10
 
         self.active_ability = Dash(self.player)
-        self.active_ability_gui = ActivatableRect(20, 20, screen)
+        self.active_ability_gui = ActivatableRect(800, 20, screen)
+
+        self.health_bar_gui = HealthBar(20, 20, self.player.statistics.max_hp, self.screen)
 
     def run_tick(self):
         self.player._use_up_invincibility()
@@ -157,4 +160,6 @@ class Game:
             self.projectiles_sprites += [AttackSprite(p) for p in projectiles]
 
     def draw_gui(self) -> None:
+        self.health_bar_gui.update_max_health(self.player.statistics.max_hp)
         self.active_ability_gui.draw(self.active_ability.percent_of_cooldown())
+        self.health_bar_gui.draw(self.player.statistics.hp)

@@ -10,6 +10,9 @@ class ActivatableRect:
     DEFAULT_COLOR = (128, 128, 128)
     DEACTIVATED_COLOR = (40, 40, 40)
     DEACTIVATED_OPACITY = 100
+    BORDER_WIDTH = 2
+    BORDER_COLOR = (0, 0, 0)
+
 
     def __init__(self, x, y, screen, image=None):
         self.x = x
@@ -25,6 +28,10 @@ class ActivatableRect:
         self.image = images[ability]
 
     def draw(self, activation_percent):
+        border_rect = pygame.Rect(self.x - self.BORDER_WIDTH, self.y - self.BORDER_WIDTH,
+                                  self.width + 2 * self.BORDER_WIDTH, self.height + 2 * self.BORDER_WIDTH)
+        pygame.draw.rect(self.screen, self.BORDER_COLOR, border_rect)
+
         rect = pygame.Rect(self.x, self.y, self.width, self.height)
         pygame.draw.rect(self.screen, self.DEFAULT_COLOR, rect)
 

@@ -2,6 +2,7 @@ class Statistics:
     def __init__(self, speed, hp = 3., contact_damage=1.):
         self.speed = speed
         self.hp = hp
+        self.max_hp = hp
         self.contact_damage = contact_damage
         self.pickup_range = 200
         self.attack_speed = 100.
