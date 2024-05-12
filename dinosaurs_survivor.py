@@ -1,6 +1,6 @@
 import pygame
 from game_mechanics.Dinosaur import Dinosaur
-from gui.Entity_presenter import Entity_presenter
+from gui.EntitySprite import EntitySprite
 from game_mechanics.Position import Position
 from Game import Game
 
@@ -40,11 +40,9 @@ def handle_player_input():
 
 dev_mode = 0
 if __name__ == "__main__":
-    FPS = 45
+    FPS = 60
     clock = pygame.time.Clock()
     pygame.init()
-
-    
     
 
     # screen_width, screen_height = pygame.display.Info().current_w, pygame.display.Info().current_h
@@ -60,7 +58,6 @@ if __name__ == "__main__":
     GREEN = (0, 153, 51)
 
     while running:
-
         clock.tick(FPS)
 
         handle_events()

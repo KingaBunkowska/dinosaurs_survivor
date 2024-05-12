@@ -24,24 +24,28 @@ class Attack:
         :type penetrate: bool
         """
         self.position = caster.position
-
-        #
         self.angle, self.direction = self.calculate_angle(target)
+
         self.caster = caster
         self.penetrate = penetrate
         self.range = range
         self.speed = speed
         self.attacked = set()
 
-
-    def calculate_dammage(self):
+    def calculate_dammage(self,target):
         """
         Calculate damage given with attack (impact of target statistics not taken into account)
+        :param entity: object taking damage
         :return: The calculated damage output.
         :rtype: float
         """
         # TODO : connect to the statistics system
-        return 1. #PLACEHOLDER
+        if target in self.attacked and not self.penetrate:
+            return 0
+        else:
+            self.attacked.add(target)
+            return 1.
+
     def calculate_angle(self,target):
         """
         Calculate the firing angle
