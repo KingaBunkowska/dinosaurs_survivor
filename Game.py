@@ -34,10 +34,10 @@ class Game:
 
         enemy_dinosaurs = [dinosaur_sprite for dinosaur_sprite in self.dinosaur_sprites if not dinosaur_sprite.dinosaur.ally]
 
-        for i,dinosaur in enumerate(self.dinosaur_sprites):
+        for i,dino in enumerate(self.dinosaur_sprites):
             dino.entity.move(self.player.position, [dino_sprite.dinosaur for dino_sprite in enemy_dinosaurs])
-            if dinosaur.entity.statistics.hp <= 0:
-                self.coin_sprites.append(dinosaur.entity.DropItems())
+            if dino.entity.statistics.hp <= 0:
+                self.coin_sprites.append(dino.entity.DropItems())
                 self.dinosaur_sprites[i] = None
         # remove dinosaurs that disappeared
         self.dinosaur_sprites = [d for d in self.dinosaur_sprites if d != None]
@@ -118,7 +118,7 @@ class Game:
                         enemy_sprite.dinosaur._receive_damage(ally_sprite.dinosaur.statistics.contact_damage)
 
         for i,coin in enumerate(self.coin_sprites):
-            if self.compare_hitbox(coin.item.position,self.player_presenter.hitbox):
+            if self.compare_hitbox(coin.hitbox,self.player_sprite.hitbox):
                 coin.item.onPick(self.player)
                 self.coin_sprites[i] = None
 
@@ -126,7 +126,7 @@ class Game:
         for i, projectiles_presenter in enumerate(self.projectiles_sprites):
             for dinosaur in enemy_sprites:
                 if (self.compare_hitbox(projectiles_presenter.colision_point, dinosaur.hitbox) and not projectiles_presenter.attack.penetrate):
-                    dinosaur.entity._receive_damage(projectiles_presenter.attack.calculate_dammage(dinosaur.entity)))
+                    dinosaur.entity._receive_damage(projectiles_presenter.attack.calculate_dammage(dinosaur.entity))
                     to_del.append(i)
                     break
         self.projectiles_sprites = [p for i, p in enumerate(self.projectiles_sprites) if i not in to_del]

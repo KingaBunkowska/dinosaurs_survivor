@@ -2,7 +2,7 @@
     "image_width": 100, 
     "image_height": 100,
     "hitbox_width": 100,
-    "hitbox_height": 100,
-    "hitbox_start_x": 0, 
-    "hitbox_start_y": 100
+    "hitbox_height": 70,
+    "hitbox_start_x": 50,
+    "hitbox_start_y": 50
 }

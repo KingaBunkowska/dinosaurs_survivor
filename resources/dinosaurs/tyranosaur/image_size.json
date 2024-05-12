@@ -1,0 +1,8 @@
+{
+    "image_width": 255,
+    "image_height": 255,
+    "hitbox_width": 221,
+    "hitbox_height": 145,
+    "hitbox_start_x": 128,
+    "hitbox_start_y": 128
+}
