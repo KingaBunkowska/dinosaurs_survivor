@@ -1,6 +1,7 @@
 from game_mechanics.Player import Player
 from game_mechanics.Dinosaur import Dinosaur
 from game_mechanics.active_abilities.Dash import Dash
+from gui.ActivatableRect import ActivatableRect
 from gui.PlayerSprite import PlayerSprite
 from gui.DinosaurSprite import DinosaurSprite
 from gui.AttackSprite import AttackSprite
@@ -24,9 +25,14 @@ class Game:
         self.time_of_contact_damage = 10
 
         self.active_ability = Dash(self.player)
+        self.active_ability_gui = ActivatableRect(20, 20, screen)
 
     def run_tick(self):
         self.player._use_up_invincibility()
+
+        self.active_ability.tick_actions()
+        self.active_ability_gui.set_image(self.active_ability.name)
+        self.draw_gui()
 
         # automatic attack
         self.attack_interval += 1
@@ -74,7 +80,6 @@ class Game:
 
         for presenter in self.projectiles_sprites:
             presenter.draw(self.screen)
-
 
     def compare_hitbox(self, colision_point, hitbox):
         """
@@ -150,3 +155,6 @@ class Game:
 
             projectiles = self.weapon.fire_attack(nearest_dinosaur.entity.position)
             self.projectiles_sprites += [AttackSprite(p) for p in projectiles]
+
+    def draw_gui(self) -> None:
+        self.active_ability_gui.draw(self.active_ability.percent_of_cooldown())

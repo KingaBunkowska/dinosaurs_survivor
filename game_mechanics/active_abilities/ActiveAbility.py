@@ -18,9 +18,10 @@ class ActiveAbility:
             self.usages_left -= 1
         
         self.active = False
+        self.curr_cooldown = 0
 
-    def fraction_of_cooldown(self):
-        return self.curr_cooldown/self.cooldown
+    def percent_of_cooldown(self):
+        return 100 - self.curr_cooldown/self.cooldown * 100
     
     def can_use(self):
         return self.active and (self.usages_left == None or self.usages_left > 0)

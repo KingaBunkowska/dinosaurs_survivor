@@ -3,7 +3,8 @@ from game_mechanics.active_abilities.ActiveAbility import ActiveAbility
 
 class Dash(ActiveAbility):
     def __init__(self, target):
-        cooldown = 120
+        self.name = "dash"
+        cooldown = 240
         usage = None
 
         super().__init__(cooldown, usage, target)
