@@ -6,10 +6,13 @@ class Entity:
         self.position = position
         self.original_facing_right = facing_right
         self.facing_right = facing_right
+        self.last_move_vector = Position(0, 1)
 
 
     def move(self, move_vector:Position):
         move_vector.normalized()
+        self.last_move_vector = move_vector if move_vector.x != 0 or move_vector.y != 0 else self.last_move_vector
+
         move_vector *= self.statistics.speed
         self.position += move_vector
         

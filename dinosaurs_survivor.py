@@ -40,6 +40,8 @@ def handle_player_input():
         x -= 1
     if keys[pygame.K_d]:
         x += 1
+    if keys[pygame.K_1]:
+        game.active_ability.use()
 
     game.player.move(Position(x, y))
 

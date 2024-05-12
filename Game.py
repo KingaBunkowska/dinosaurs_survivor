@@ -1,5 +1,6 @@
 from game_mechanics.Player import Player
 from game_mechanics.Dinosaur import Dinosaur
+from game_mechanics.active_abilities.Dash import Dash
 from gui.PlayerSprite import PlayerSprite
 from gui.DinosaurSprite import DinosaurSprite
 from gui.AttackSprite import AttackSprite
@@ -21,6 +22,8 @@ class Game:
         self.invincibility_frames = 100
         self.weapon = Weapon(self.player)
         self.time_of_contact_damage = 10
+
+        self.active_ability = Dash(self.player)
 
     def run_tick(self):
         self.player._use_up_invincibility()
@@ -71,6 +74,7 @@ class Game:
 
         for presenter in self.projectiles_sprites:
             presenter.draw(self.screen)
+
 
     def compare_hitbox(self, colision_point, hitbox):
         """
