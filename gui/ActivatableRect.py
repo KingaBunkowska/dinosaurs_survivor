@@ -2,7 +2,8 @@ import pygame
 import os
 
 images = {
-    "dash": pygame.image.load("resources\icons\dash.png")
+    "dash": pygame.image.load("resources\icons\dash.png"),
+    "heal": pygame.image.load("resources\icons\heal.png")
 }
 
 class ActivatableRect:
@@ -25,7 +26,7 @@ class ActivatableRect:
         self.width = self.height = 30
 
     def set_image(self, ability = "dash"):
-        self.image = images[ability]
+        self.image = images[ability.name]
 
     def draw(self, activation_percent):
         border_rect = pygame.Rect(self.x - self.BORDER_WIDTH, self.y - self.BORDER_WIDTH,

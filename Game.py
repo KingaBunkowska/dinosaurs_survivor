@@ -1,6 +1,7 @@
 from game_mechanics.Player import Player
 from game_mechanics.Dinosaur import Dinosaur
 from game_mechanics.active_abilities.Dash import Dash
+from game_mechanics.active_abilities.Heal import Heal
 from gui.HealthBar import HealthBar
 from gui.ActivatableRect import ActivatableRect
 from gui.PlayerSprite import PlayerSprite
@@ -25,16 +26,17 @@ class Game:
         self.weapon = Weapon(self.player)
         self.time_of_contact_damage = 10
 
-        self.active_ability = Dash(self.player)
-        self.active_ability_gui = ActivatableRect(800, 20, screen)
+        self.active_abilities = [Dash(self.player), Heal(self.player)]
+        self.active_abilities_gui = [ActivatableRect(800, 20, screen), ActivatableRect(850, 20, screen)]
+
+        for i, gui in enumerate(self.active_abilities_gui):
+            gui.set_image(self.active_abilities[i])
 
         self.health_bar_gui = HealthBar(20, 20, self.player.statistics.max_hp, self.screen)
 
     def run_tick(self):
         self.player._use_up_invincibility()
 
-        self.active_ability.tick_actions()
-        self.active_ability_gui.set_image(self.active_ability.name)
         self.draw_gui()
 
         # automatic attack
@@ -161,5 +163,9 @@ class Game:
 
     def draw_gui(self) -> None:
         self.health_bar_gui.update_max_health(self.player.statistics.max_hp)
-        self.active_ability_gui.draw(self.active_ability.percent_of_cooldown())
         self.health_bar_gui.draw(self.player.statistics.hp)
+
+        for i in range(len(self.active_abilities)):
+            self.active_abilities[i].tick_actions()
+            self.active_abilities_gui[i].set_image(self.active_abilities[i])
+            self.active_abilities_gui[i].draw(self.active_abilities[i].percent_of_cooldown())

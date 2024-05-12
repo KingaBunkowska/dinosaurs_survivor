@@ -1,9 +1,9 @@
 from game_mechanics.active_abilities.ActiveAbility import ActiveAbility
 
 
-class Dash(ActiveAbility):
+class Heal(ActiveAbility):
     def __init__(self, target):
-        self.name = "dash"
+        self.name = "heal"
         cooldown = 600
         usage = 3
 
@@ -11,5 +11,5 @@ class Dash(ActiveAbility):
 
     def use(self):
         if self.can_use():
-            self.target.statistics.health += 5
+            self.target.statistics.hp = min(self.target.statistics.hp + 5, self.target.statistics.max_hp)
             self.consume()
