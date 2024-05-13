@@ -3,6 +3,7 @@ from game_mechanics.Dinosaur import Dinosaur
 from game_mechanics.active_abilities.Dash import Dash
 from game_mechanics.active_abilities.Fire import Fire
 from game_mechanics.active_abilities.Heal import Heal
+from gui.AbilitySprite import AbilitySprite
 from gui.HealthBar import HealthBar
 from gui.ActivatableRect import ActivatableRect
 from gui.PlayerSprite import PlayerSprite
@@ -27,7 +28,7 @@ class Game:
         self.weapon = Weapon(self.player)
         self.time_of_contact_damage = 10
 
-        self.active_abilities = [Dash(self.player), Fire(self.player)]
+        self.active_abilities = [Heal(self.player), Fire(self.player)]
         self.active_abilities_gui = [ActivatableRect(800 + 50 * i, 20, screen, self.active_abilities[i])
                                      for i in range(2)]
 
@@ -35,10 +36,12 @@ class Game:
             gui.set_image(self.active_abilities[i])
 
         self.health_bar_gui = HealthBar(20, 20, self.player.statistics.max_hp, self.screen)
+        
+        self.ability_sprites_and_duration = []
 
     def run_tick(self):
         self.player._use_up_invincibility()
-
+        self.draw_abilities()
         self.draw_gui()
 
         # automatic attack
@@ -171,3 +174,21 @@ class Game:
             self.active_abilities[i].tick_actions()
             self.active_abilities_gui[i].set_image(self.active_abilities[i])
             self.active_abilities_gui[i].draw(self.active_abilities[i].percent_of_cooldown())
+
+    def draw_abilities(self):
+
+        self.ability_sprites_and_duration = [ability_and_duration for ability_and_duration in self.ability_sprites_and_duration if ability_and_duration[1]>0]
+        
+        for i, (sprite, duration) in enumerate(self.ability_sprites_and_duration):
+            sprite.draw(self.screen)
+            self.ability_sprites_and_duration[i][1] -= 1
+
+    def use_ability(self, i):
+        if self.active_abilities[i].can_use():
+            self.active_abilities[i].use()
+
+            if self.active_abilities[i].name == "fire":
+                self.ability_sprites_and_duration.append([AbilitySprite(self.player.position, self.active_abilities[i].name), 30])
+
+            elif self.active_abilities[i].name == "heal":
+                self.ability_sprites_and_duration.append([AbilitySprite(self.player.position, self.active_abilities[i].name, player=self.player, move_with_player=True), 30])

@@ -12,8 +12,7 @@ class Fire(ActiveAbility):
 
     def use(self, dinosaurs_sprites=[]):
         if self.can_use():
-            targets = [dinosaur for dinosaur in [dinosaur_sprite.dinosaur for dinosaur_sprite in dinosaurs_sprites] if dinosaur.position.distance(self.player.position)<500 and not dinosaur.ally]
-            print(targets, dinosaurs_sprites)
+            targets = [dinosaur for dinosaur in [dinosaur_sprite.dinosaur for dinosaur_sprite in dinosaurs_sprites] if dinosaur.position.distance(self.player.position)<100 and not dinosaur.ally]
             for target in targets:
                 target._receive_damage(1)
             self.consume()
