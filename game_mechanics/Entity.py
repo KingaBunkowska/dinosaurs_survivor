@@ -1,6 +1,7 @@
 from game_mechanics.Position import Position
 
 class Entity:
+
     def __init__(self, statistics = None, position = Position(200, 200), facing_right=False):
         self.statistics = statistics
         self.position = position
@@ -15,6 +16,7 @@ class Entity:
 
         move_vector *= self.statistics.speed
         self.position += move_vector
+        self.position.inside_screen()
         
         if move_vector.to_coords()[0] > 10**-3:
             self.facing_right = not self.original_facing_right

@@ -1,6 +1,7 @@
 from game_mechanics.Player import Player
 from game_mechanics.Dinosaur import Dinosaur
 from game_mechanics.active_abilities.Dash import Dash
+from game_mechanics.active_abilities.Fire import Fire
 from game_mechanics.active_abilities.Heal import Heal
 from gui.HealthBar import HealthBar
 from gui.ActivatableRect import ActivatableRect
@@ -26,7 +27,7 @@ class Game:
         self.weapon = Weapon(self.player)
         self.time_of_contact_damage = 10
 
-        self.active_abilities = [Dash(self.player), Heal(self.player)]
+        self.active_abilities = [Dash(self.player), Fire(self.player)]
         self.active_abilities_gui = [ActivatableRect(800 + 50 * i, 20, screen, self.active_abilities[i])
                                      for i in range(2)]
 

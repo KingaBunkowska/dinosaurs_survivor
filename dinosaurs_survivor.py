@@ -45,7 +45,7 @@ def handle_player_input():
     if keys[pygame.K_1]:
         game.active_abilities[0].use()
     if keys[pygame.K_2]:
-        game.active_abilities[1].use()
+        game.active_abilities[1].use(game.dinosaur_sprites)
 
     game.player.move(Position(x, y))
 
