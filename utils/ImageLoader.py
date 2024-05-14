@@ -62,10 +62,10 @@ class ImageLoader():
                         if __is_png_file(os.path.join(directory_path, file_name)):
                             images[file_name[:-4]] = pygame.transform.scale(pygame.image.load(os.path.join(directory_path, file_name)),[size["image_height"],size["image_width"]])
 
-            pickable_path = os.path.join(path, "projectile")
-            for item in os.listdir(pickable_path):
-                directory_path = os.path.join(pickable_path, item, "images")
-                json_path = os.path.join(pickable_path, item, "image_size.json")
+            projectile_path = os.path.join(path, "projectile")
+            for item in os.listdir(projectile_path):
+                directory_path = os.path.join(projectile_path, item, "images")
+                json_path = os.path.join(projectile_path, item, "image_size.json")
                 if os.path.isdir(directory_path) and os.path.exists(json_path):
 
                     with open(json_path, "r") as json_path:

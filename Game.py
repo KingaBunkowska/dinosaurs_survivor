@@ -9,6 +9,12 @@ from game_mechanics.Weapon import Weapon
 from game_mechanics.Coin import Coin
 from gui.PickableItemSprite import PickableItemSprite
 from gui.LevelUpMenu import LevelUpMenu
+from game_mechanics.Weapons.Pistol import Pistol
+from game_mechanics.Weapons.Pickaxe import Pickaxe
+from game_mechanics.Weapons.Rifle import Rifle
+from game_mechanics.Weapons.Shotgun import Shotgun
+from game_mechanics.PickableWeapon import PickableWeapons
+from gui.PickableWeaponSprite import PickableWeaponSprite
 
 class Game:
     def __init__(self, screen):
@@ -19,7 +25,7 @@ class Game:
         self.player_sprite = PlayerSprite(self.player)
         self.pickable_sprites = []
         self.invincibility_frames = 100
-        self.weapon = Weapon(self.player)
+        self.weapon = Pistol(self.player)
         self.time_of_contact_damage = 10
 
         self.option = None
@@ -121,9 +127,9 @@ class Game:
                         dinosaurs_hitted += 1
                         enemy_sprite.dinosaur._receive_damage(ally_sprite.dinosaur.statistics.contact_damage)
 
-        for i,coin in enumerate(self.pickable_sprites):
-            if self.compare_hitbox(coin.hitbox,self.player_sprite.hitbox):
-                coin.item.onPick(self.player)
+        for i,pickable in enumerate(self.pickable_sprites):
+            if self.compare_hitbox(pickable.hitbox,self.player_sprite.hitbox):
+                pickable.item.onPick(self)
                 self.pickable_sprites[i] = None
 
         to_del = []
@@ -148,12 +154,32 @@ class Game:
             if enemy_dinosaurs:
                 nearest_dinosaur = min(enemy_dinosaurs, key=lambda dino: self.player.position.distance(dino.entity.position))
 
-                projectiles = self.weapon.fire_attack(nearest_dinosaur.entity.position)
-                self.projectiles_sprites += [AttackSprite(p) for p in projectiles]
+                projectiles, projectiles_type = self.weapon.fire_attack(nearest_dinosaur.entity.position)
+                self.projectiles_sprites += [AttackSprite(p,attack_type=projectiles_type) for p in projectiles]
 
     def make_option(self):
         self.option = LevelUpMenu(self.player.level)
     def resolve_option(self,option):
+        if self.player.level == 5:
+            if option == 1:
+                # self.weapon = Rifle(self.player)
+                self.pickable_sprites.append(PickableWeaponSprite(PickableWeapons(Position(100,100),Rifle(self.player))))
+            if option == 2:
+                # self.weapon = Pickaxe(self.player)
+                self.pickable_sprites.append(
+                    PickableWeaponSprite(PickableWeapons(Position(100, 100), Pickaxe(self.player))))
+        if self.player.level == 10:
+            if self.weapon.__class__ == Pickaxe:
+                if option == 1:
+                    self.weapon = Pistol(self.player)
+                if option == 2:
+                    self.weapon = Pickaxe(self.player)
+            if self.weapon.__class__ == Rifle:
+                if option == 1:
+                    self.weapon = Pistol(self.player)
+                if option == 2:
+                    self.weapon = Shotgun(self.player)
+            print(self.weapon.accuracy, self.weapon.attack_nr)
         if self.player.level != 5 and self.player.level != 10:
             self.player.stat_up(5,option)
         self.option = None
