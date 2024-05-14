@@ -4,6 +4,7 @@ from game_mechanics.active_abilities.Dash import Dash
 from game_mechanics.active_abilities.Fire import Fire
 from game_mechanics.active_abilities.Heal import Heal
 from game_mechanics.active_abilities.SlowDownTime import SlowDownTime
+from gui.GameOver import GameOver
 from gui.AbilitySprite import AbilitySprite
 from gui.HealthBar import HealthBar
 from gui.ActivatableRect import ActivatableRect
@@ -42,58 +43,63 @@ class Game:
 
         self.delayed_actions = []
 
+        self.running = True
+
     def run_tick(self):
-        self.player._use_up_invincibility()
-        self.do_delayed_actions()
-        self.draw_abilities()
-        self.draw_gui()
+        self.check_game_over()
 
-        # automatic attack
-        self.attack_interval += 1
-        if self.attack_interval == self.player.statistics.attack_speed:
-            self.attack_interval = 0
-            self.player_attack()
-        self.check_collisions()
+        if self.running:
+            self.player._use_up_invincibility()
+            self.do_delayed_actions()
+            self.draw_abilities()
+            self.draw_gui()
 
-        enemy_dinosaurs = [dinosaur_sprite for dinosaur_sprite in self.dinosaur_sprites if not dinosaur_sprite.dinosaur.ally]
+            # automatic attack
+            self.attack_interval += 1
+            if self.attack_interval == self.player.statistics.attack_speed:
+                self.attack_interval = 0
+                self.player_attack()
+            self.check_collisions()
 
-        for i,dino in enumerate(self.dinosaur_sprites):
-            dino.entity.move(self.player.position, [dino_sprite.dinosaur for dino_sprite in enemy_dinosaurs])
-            if dino.entity.statistics.hp <= 0:
-                self.coin_sprites.append(dino.entity.DropItems())
-                self.dinosaur_sprites[i] = None
-        # remove dinosaurs that disappeared
-        self.dinosaur_sprites = [d for d in self.dinosaur_sprites if d != None]
+            enemy_dinosaurs = [dinosaur_sprite for dinosaur_sprite in self.dinosaur_sprites if not dinosaur_sprite.dinosaur.ally]
 
-        self.dinosaur_sprites = [dinosaur_sprite for dinosaur_sprite in self.dinosaur_sprites if dinosaur_sprite.dinosaur.statistics.hp >= 0]
+            for i,dino in enumerate(self.dinosaur_sprites):
+                dino.entity.move(self.player.position, [dino_sprite.dinosaur for dino_sprite in enemy_dinosaurs])
+                if dino.entity.statistics.hp <= 0:
+                    self.coin_sprites.append(dino.entity.DropItems())
+                    self.dinosaur_sprites[i] = None
+            # remove dinosaurs that disappeared
+            self.dinosaur_sprites = [d for d in self.dinosaur_sprites if d != None]
 
-
-        self.player_sprite.draw(self.screen)
-
-        self.dinosaur_sprites.sort(key=lambda presenter: presenter.entity.get_position().to_coords()[1])
-
-        for presenter in self.dinosaur_sprites:
-            presenter.draw(self.screen)
-
-        self.coin_sprites = [c for c in self.coin_sprites if c != None]
-
-        for coin in self.coin_sprites:
-            if self.player.position.distance(coin.item.position) <= self.player.statistics.pickup_range:
-                coin.item.move(self.player.position)
-            coin.draw(self.screen)
+            self.dinosaur_sprites = [dinosaur_sprite for dinosaur_sprite in self.dinosaur_sprites if dinosaur_sprite.dinosaur.statistics.hp >= 0]
 
 
-        for i, projectile in enumerate(self.projectiles_sprites):
-            if projectile.attack.range <= 0:
-                self.projectiles_sprites[i] = None
-            else:
-                projectile.attack.fly()
+            self.player_sprite.draw(self.screen)
 
-        # remove projectiles that disappeared
-        self.projectiles_sprites = [p for p in self.projectiles_sprites if p != None]
+            self.dinosaur_sprites.sort(key=lambda presenter: presenter.entity.get_position().to_coords()[1])
 
-        for presenter in self.projectiles_sprites:
-            presenter.draw(self.screen)
+            for presenter in self.dinosaur_sprites:
+                presenter.draw(self.screen)
+
+            self.coin_sprites = [c for c in self.coin_sprites if c != None]
+
+            for coin in self.coin_sprites:
+                if self.player.position.distance(coin.item.position) <= self.player.statistics.pickup_range:
+                    coin.item.move(self.player.position)
+                coin.draw(self.screen)
+
+
+            for i, projectile in enumerate(self.projectiles_sprites):
+                if projectile.attack.range <= 0:
+                    self.projectiles_sprites[i] = None
+                else:
+                    projectile.attack.fly()
+
+            # remove projectiles that disappeared
+            self.projectiles_sprites = [p for p in self.projectiles_sprites if p != None]
+
+            for presenter in self.projectiles_sprites:
+                presenter.draw(self.screen)
 
     def compare_hitbox(self, colision_point, hitbox):
         """
@@ -209,3 +215,8 @@ class Game:
             self.delayed_actions[i][1] -= 1
 
         self.delayed_actions = [action_and_dur for action_and_dur in self.delayed_actions if action_and_dur[1]>=0]
+
+    def check_game_over(self):
+        if self.player.statistics.hp <= 0:
+            GameOver().draw(self.screen)
+            self.running = False
