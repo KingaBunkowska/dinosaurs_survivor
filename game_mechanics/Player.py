@@ -33,7 +33,7 @@ class Player(Entity):
         if stat == 1:
             self.statistics.hp_up(value)
         elif stat == 2:
-            self.statistics.speed_up(value)
+            self.statistics.speed_up(value//2)
         else:
             self.statistics.damage_up(value)
 

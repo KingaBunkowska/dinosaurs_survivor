@@ -60,7 +60,7 @@ class Attack:
 
         vector = target - self.position
         vector.normalized()
-        vector += Position(random.randint(-self.accuracy,self.accuracy),random.randint(-self.accuracy,self.accuracy))
+        vector += Position(random.uniform(-self.accuracy,self.accuracy),random.uniform(-self.accuracy,self.accuracy))
         return math.degrees(math.atan2(-vector.y, vector.x)), vector
     def fly(self):
         """

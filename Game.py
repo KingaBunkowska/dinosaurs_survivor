@@ -44,7 +44,7 @@ class Game:
         for i, gui in enumerate(self.active_abilities_gui):
             gui.set_image(self.active_abilities[i])
 
-        self.health_bar_gui = HealthBar(20, 20, self.player.statistics.max_hp, self.screen)
+        self.health_bar_gui = HealthBar(50, 30, self.player.statistics.max_hp, self.screen)
         
         self.ability_sprites_and_duration = []
 
@@ -61,20 +61,20 @@ class Game:
             self.draw_abilities()
             self.draw_gui()
 
-        self.player_attack()
-        self.check_collisions()
+            self.player_attack()
+            self.check_collisions()
 
-         enemy_dinosaurs = [dinosaur_sprite for dinosaur_sprite in self.dinosaur_sprites if not dinosaur_sprite.dinosaur.ally]
+            enemy_dinosaurs = [dinosaur_sprite for dinosaur_sprite in self.dinosaur_sprites if not dinosaur_sprite.dinosaur.ally]
 
-        for i,dino in enumerate(self.dinosaur_sprites):
-            dino.entity.move(self.player.position, [dino_sprite.dinosaur for dino_sprite in enemy_dinosaurs])
-            if dino.entity.statistics.hp <= 0:
-                self.pickable_sprites.append(dino.entity.DropItems())
-                self.dinosaur_sprites[i] = None
-                if self.player.get_experience(dino.entity.give_exp()):
-                    self.make_option()
-        # remove dinosaurs that disappeared
-        self.dinosaur_sprites = [d for d in self.dinosaur_sprites if d != None]
+            for i,dino in enumerate(self.dinosaur_sprites):
+                dino.entity.move(self.player.position, [dino_sprite.dinosaur for dino_sprite in enemy_dinosaurs])
+                if dino.entity.statistics.hp <= 0:
+                    self.pickable_sprites.append(dino.entity.DropItems())
+                    self.dinosaur_sprites[i] = None
+                    if self.player.get_experience(dino.entity.give_exp()):
+                        self.make_option()
+            # remove dinosaurs that disappeared
+            self.dinosaur_sprites = [d for d in self.dinosaur_sprites if d != None]
 
             self.dinosaur_sprites = [dinosaur_sprite for dinosaur_sprite in self.dinosaur_sprites if dinosaur_sprite.dinosaur.statistics.hp >= 0]
 
@@ -86,12 +86,12 @@ class Game:
             for presenter in self.dinosaur_sprites:
                 presenter.draw(self.screen)
 
-        self.pickable_sprites = [c for c in self.pickable_sprites if c != None]
+            self.pickable_sprites = [c for c in self.pickable_sprites if c != None]
 
-        for pickable in self.pickable_sprites:
-            if self.player.position.distance(pickable.item.position) <= self.player.statistics.pickup_range:
-                pickable.item.move(self.player.position)
-            pickable.draw(self.screen)
+            for pickable in self.pickable_sprites:
+                if self.player.position.distance(pickable.item.position) <= self.player.statistics.pickup_range:
+                    pickable.item.move(self.player.position)
+                pickable.draw(self.screen)
 
 
             for i, projectile in enumerate(self.projectiles_sprites):
@@ -106,8 +106,8 @@ class Game:
             for presenter in self.projectiles_sprites:
                 presenter.draw(self.screen)
 
-        if self.option != None:
-            self.option.draw(self.screen)
+            if self.option != None:
+                self.option.draw(self.screen)
 
     def compare_hitbox(self, colision_point, hitbox):
         """
@@ -187,25 +187,32 @@ class Game:
     def make_option(self):
         self.option = LevelUpMenu(self.player.level)
     def resolve_option(self,option):
+        x, y = self.screen.get_size()
+        x, y =x//2, y //2
+
         if self.player.level == 5:
             if option == 1:
                 # self.weapon = Rifle(self.player)
-                self.pickable_sprites.append(PickableWeaponSprite(PickableWeapons(Position(100,100),Rifle(self.player))))
+                self.pickable_sprites.append(PickableWeaponSprite(PickableWeapons(Position(x,y),Rifle(self.player))))
             if option == 2:
                 # self.weapon = Pickaxe(self.player)
                 self.pickable_sprites.append(
-                    PickableWeaponSprite(PickableWeapons(Position(100, 100), Pickaxe(self.player))))
+                    PickableWeaponSprite(PickableWeapons(Position(x, y), Pickaxe(self.player))))
         if self.player.level == 10:
             if self.weapon.__class__ == Pickaxe:
                 if option == 1:
-                    self.weapon = Pistol(self.player)
+                    self.pickable_sprites.append(
+                        PickableWeaponSprite(PickableWeapons(Position(x, y), Pistol(self.player))))
                 if option == 2:
-                    self.weapon = Pickaxe(self.player)
+                    self.pickable_sprites.append(
+                        PickableWeaponSprite(PickableWeapons(Position(x, y), Pickaxe(self.player))))
             if self.weapon.__class__ == Rifle:
                 if option == 1:
-                    self.weapon = Pistol(self.player)
+                    self.pickable_sprites.append(
+                        PickableWeaponSprite(PickableWeapons(Position(x, y), Pistol(self.player))))
                 if option == 2:
-                    self.weapon = Shotgun(self.player)
+                    self.pickable_sprites.append(
+                        PickableWeaponSprite(PickableWeapons(Position(x, y), Shotgun(self.player))))
             print(self.weapon.accuracy, self.weapon.attack_nr)
         if self.player.level != 5 and self.player.level != 10:
             self.player.stat_up(5,option)

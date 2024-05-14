@@ -8,10 +8,10 @@ import pygame
 class PlayerSprite(EntitySprite):
     def __init__(self, player:Player):
         image = ImageLoader.get_player_sprite()
-        hitbox_start = [None, None]
-        hitbox_size = [None, None]
-        hitbox_start[0], hitbox_start[1], hitbox_size[0],hitbox_size[1] = ImageLoader.get_player_hitbox()
-        super().__init__(player, image, hitbox_size, hitbox_start)
+        self.hitbox_start = [None, None]
+        self.hitbox_size = [None, None]
+        self.hitbox_start[0], self.hitbox_start[1], self.hitbox_size[0],self.hitbox_size[1] = ImageLoader.get_player_hitbox()
+        super().__init__(player, image, self.hitbox_size, self.hitbox_start)
 
     def draw(self, screen):
         self.hitbox = (Position(self.hitbox_start[0] - self.hitbox_size[0],
