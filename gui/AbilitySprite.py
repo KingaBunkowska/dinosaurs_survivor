@@ -5,8 +5,12 @@ import pygame
 ! To do: Exception if trying to use image that is not there
 """
 
-images = {"fire": pygame.image.load("resources\\abilities\\fire.png"),
-          "heal": pygame.image.load("resources\\abilities\\heal.png")}
+images = {
+    "fire": pygame.image.load("resources\\abilities\\fire.png"),
+    "heal": pygame.image.load("resources\\abilities\\heal.png"), 
+    "slow_down_time": pygame.image.load("resources\\abilities\\none.png"), 
+    "dash": pygame.image.load("resources\\abilities\\none.png")
+    }
 
 class AbilitySprite:
     def __init__(self, position, ability_name, player=None, move_with_player=False):

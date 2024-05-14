@@ -9,12 +9,18 @@ class Entity:
         self.facing_right = facing_right
         self.last_move_vector = Position(0, 1)
 
+        self.slowed_down = False
+
 
     def move(self, move_vector:Position):
         move_vector.normalized()
         self.last_move_vector = move_vector if move_vector.x != 0 or move_vector.y != 0 else self.last_move_vector
 
         move_vector *= self.statistics.speed
+        
+        if self.slowed_down:
+            move_vector *= 0.5
+
         self.position += move_vector
         self.position.inside_screen()
         

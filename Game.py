@@ -3,6 +3,7 @@ from game_mechanics.Dinosaur import Dinosaur
 from game_mechanics.active_abilities.Dash import Dash
 from game_mechanics.active_abilities.Fire import Fire
 from game_mechanics.active_abilities.Heal import Heal
+from game_mechanics.active_abilities.SlowDownTime import SlowDownTime
 from gui.AbilitySprite import AbilitySprite
 from gui.HealthBar import HealthBar
 from gui.ActivatableRect import ActivatableRect
@@ -28,7 +29,7 @@ class Game:
         self.weapon = Weapon(self.player)
         self.time_of_contact_damage = 10
 
-        self.active_abilities = [Heal(self.player), Fire(self.player)]
+        self.active_abilities = [SlowDownTime(self.player, self), Dash(self.player)]
         self.active_abilities_gui = [ActivatableRect(800 + 50 * i, 20, screen, self.active_abilities[i])
                                      for i in range(2)]
 
@@ -39,8 +40,11 @@ class Game:
         
         self.ability_sprites_and_duration = []
 
+        self.delayed_actions = []
+
     def run_tick(self):
         self.player._use_up_invincibility()
+        self.do_delayed_actions()
         self.draw_abilities()
         self.draw_gui()
 
@@ -192,3 +196,16 @@ class Game:
 
             elif self.active_abilities[i].name == "heal":
                 self.ability_sprites_and_duration.append([AbilitySprite(self.player.position, self.active_abilities[i].name, player=self.player, move_with_player=True), 30])
+
+            elif self.active_abilities[i].name == "slow_down_time":
+                self.ability_sprites_and_duration.append([AbilitySprite(self.player.position, self.active_abilities[i].name, player=self.player, move_with_player=True), self.active_abilities[i].duration])
+                self.delayed_actions.append([self.active_abilities[i].deactivate, self.active_abilities[i].duration])
+
+    def do_delayed_actions(self):
+        for i, (delayed_action, ticks_to_activation) in enumerate(self.delayed_actions):
+            if ticks_to_activation == 0:
+                delayed_action()
+
+            self.delayed_actions[i][1] -= 1
+
+        self.delayed_actions = [action_and_dur for action_and_dur in self.delayed_actions if action_and_dur[1]>=0]

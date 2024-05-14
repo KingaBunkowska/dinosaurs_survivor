@@ -5,7 +5,8 @@ images = {
     "dash": pygame.image.load("resources\icons\dash.png"),
     "heal": pygame.image.load("resources\icons\heal.png"),
     "none": pygame.image.load("resources\icons\\none.png"), 
-    "fire": pygame.image.load("resources\icons\\fire.png")
+    "fire": pygame.image.load("resources\icons\\fire.png"),
+    "slow_down_time": pygame.image.load("resources\icons\\slow_down_time.png")
 }
 
 class ActivatableRect:
