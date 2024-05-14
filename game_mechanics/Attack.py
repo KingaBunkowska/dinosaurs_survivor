@@ -6,7 +6,7 @@ class Attack:
     superclass for any form of attack
     """
 
-    def __init__(self, target, caster,speed = 8,range = float('inf'), penetrate=False):
+    def __init__(self, target, caster,speed = 8,range = float('inf'), penetrate=True):
         """
         :param target: coordinates of target
         :type target: Position
@@ -40,11 +40,10 @@ class Attack:
         :rtype: float
         """
         # TODO : connect to the statistics system
-        if target in self.attacked and not self.penetrate:
+        if target in self.attacked:
             return 0
-        else:
-            self.attacked.add(target)
-            return 1.
+        self.attacked.add(target)
+        return 1.
 
     def calculate_angle(self,target):
         """

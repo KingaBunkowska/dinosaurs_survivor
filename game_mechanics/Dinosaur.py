@@ -27,3 +27,5 @@ class Dinosaur(Entity):
     def DropItems(self):
         value = random.randint(1,10)
         return CoinSprite(Coin(self.position,value))
+    def give_exp(self):
+        return self.type.value["exp"]

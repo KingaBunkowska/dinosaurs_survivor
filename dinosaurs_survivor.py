@@ -41,7 +41,16 @@ def handle_player_input():
     if keys[pygame.K_d]:
         x += 1
 
+    option = 0
+    if keys[pygame.K_1]:
+        option = 1
+    elif keys[pygame.K_2]:
+        option = 2
+    elif keys[pygame.K_3]:
+        option = 3
+
     game.player.move(Position(x, y))
+    if option != 0 : game.resolve_option(option)
 
 dev_mode = 0
 if __name__ == "__main__":

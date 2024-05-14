@@ -26,6 +26,10 @@ class ImageLoader():
             return path.lower().endswith('.png')
 
         try:
+            with open(os.path.join(path, "player","image_size.json"),"r") as json_player:
+                sizes["player"] = json.load(json_player)
+            images["player"] = pygame.transform.scale(pygame.image.load(os.path.join(path, "player","miner.png")),[sizes["player"]["image_height"],sizes["player"]["image_width"]])
+
             dinosaurs_path = os.path.join(path, "dinosaurs")
             for entity_type in os.listdir(dinosaurs_path):
                 directory_path = os.path.join(dinosaurs_path, entity_type)
@@ -123,6 +127,14 @@ class ImageLoader():
             return images.get(projectile_name)
 
         raise ImagesNotFoundException("Image for", projectile_name, "was not found")
+
+    @staticmethod
+    def get_player_sprite():
+        return images["player"]
+
+    @staticmethod
+    def get_player_hitbox():
+        return [sizes["player"]["hitbox_start_x"],sizes["player"]["hitbox_start_y"],sizes["player"]["hitbox_width"],sizes["player"]["hitbox_height"]]
 
 class ImagesNotFoundException(Exception):
     pass

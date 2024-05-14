@@ -22,6 +22,8 @@ class Weapon:
         self.speed = speed
         self.range = range
         self.attack_nr = attack_nr
+        self.attack_speed = self.owner.statistics.attack_speed
+        self.attack_interval = 0
     def fire_attack(self, target):
         """
         Create attacks
@@ -33,3 +35,9 @@ class Weapon:
         for i in range(self.attack_nr):
             projectiles.append(Attack(target,self.owner, self.speed, self.range, penetrate = False))
         return projectiles
+    def check_interval(self):
+        self.attack_interval += 1
+        if self.attack_interval == self.attack_speed:
+            self.attack_interval = 0
+            return True
+        return False
