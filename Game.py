@@ -1,5 +1,12 @@
 from game_mechanics.Player import Player
 from game_mechanics.Dinosaur import Dinosaur
+from game_mechanics.active_abilities.Dash import Dash
+from game_mechanics.active_abilities.Fire import Fire
+from game_mechanics.active_abilities.Heal import Heal
+from game_mechanics.active_abilities.SlowDownTime import SlowDownTime
+from gui.AbilitySprite import AbilitySprite
+from gui.HealthBar import HealthBar
+from gui.ActivatableRect import ActivatableRect
 from gui.PlayerSprite import PlayerSprite
 from gui.DinosaurSprite import DinosaurSprite
 from gui.AttackSprite import AttackSprite
@@ -22,8 +29,24 @@ class Game:
         self.weapon = Weapon(self.player)
         self.time_of_contact_damage = 10
 
+        self.active_abilities = [SlowDownTime(self.player, self), Dash(self.player)]
+        self.active_abilities_gui = [ActivatableRect(800 + 50 * i, 20, screen, self.active_abilities[i])
+                                     for i in range(2)]
+
+        for i, gui in enumerate(self.active_abilities_gui):
+            gui.set_image(self.active_abilities[i])
+
+        self.health_bar_gui = HealthBar(20, 20, self.player.statistics.max_hp, self.screen)
+        
+        self.ability_sprites_and_duration = []
+
+        self.delayed_actions = []
+
     def run_tick(self):
         self.player._use_up_invincibility()
+        self.do_delayed_actions()
+        self.draw_abilities()
+        self.draw_gui()
 
         # automatic attack
         self.attack_interval += 1
@@ -146,3 +169,43 @@ class Game:
 
             projectiles = self.weapon.fire_attack(nearest_dinosaur.entity.position)
             self.projectiles_sprites += [AttackSprite(p) for p in projectiles]
+
+    def draw_gui(self) -> None:
+        self.health_bar_gui.update_max_health(self.player.statistics.max_hp)
+        self.health_bar_gui.draw(self.player.statistics.hp)
+
+        for i in range(len(self.active_abilities)):
+            self.active_abilities[i].tick_actions()
+            self.active_abilities_gui[i].set_image(self.active_abilities[i])
+            self.active_abilities_gui[i].draw(self.active_abilities[i].percent_of_cooldown())
+
+    def draw_abilities(self):
+
+        self.ability_sprites_and_duration = [ability_and_duration for ability_and_duration in self.ability_sprites_and_duration if ability_and_duration[1]>0]
+        
+        for i, (sprite, duration) in enumerate(self.ability_sprites_and_duration):
+            sprite.draw(self.screen)
+            self.ability_sprites_and_duration[i][1] -= 1
+
+    def use_ability(self, i):
+        if self.active_abilities[i].can_use():
+            self.active_abilities[i].use()
+
+            if self.active_abilities[i].name == "fire":
+                self.ability_sprites_and_duration.append([AbilitySprite(self.player.position, self.active_abilities[i].name), 30])
+
+            elif self.active_abilities[i].name == "heal":
+                self.ability_sprites_and_duration.append([AbilitySprite(self.player.position, self.active_abilities[i].name, player=self.player, move_with_player=True), 30])
+
+            elif self.active_abilities[i].name == "slow_down_time":
+                self.ability_sprites_and_duration.append([AbilitySprite(self.player.position, self.active_abilities[i].name, player=self.player, move_with_player=True), self.active_abilities[i].duration])
+                self.delayed_actions.append([self.active_abilities[i].deactivate, self.active_abilities[i].duration])
+
+    def do_delayed_actions(self):
+        for i, (delayed_action, ticks_to_activation) in enumerate(self.delayed_actions):
+            if ticks_to_activation == 0:
+                delayed_action()
+
+            self.delayed_actions[i][1] -= 1
+
+        self.delayed_actions = [action_and_dur for action_and_dur in self.delayed_actions if action_and_dur[1]>=0]
