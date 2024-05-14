@@ -14,11 +14,11 @@ class ImageLoader():
     Class is loading dinsaurs images from path. Files must be organized accordingly:
         - every type should be located in its own directory
         - directory should be named exactly like name in DinosaurType
-        !!!!- in directory there must be a file specifing size of hitbox !!!!(to-do:dopisać w jakim formacie)!!!! and two folders: ally and enemy 
+        - image_size.json to indicate image properties:     
+            - "image_width", "image_height" - size after scaling
+            - "hitbox_start_x", "hitbox_start_y" - start of hitbox (top left corner)
+            - "hitbox_width", "hitbox_height" - size of hitbox
     
-    !!!!!!!!!! Method give_random !!!!!!!
-
-    !!!! Error handling !!!!
     """
 
     def __init__(self, path="./resources"):

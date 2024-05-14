@@ -1,4 +1,8 @@
+import copy
+
 class Position():
+
+    screen_width, screen_height = 1360, 748
 
     def __init__(self, x, y):
         self.x = x
@@ -53,3 +57,16 @@ class Position():
         else:
             return False
 
+    def inside_screen(self, width=0, height=0):
+        if (self.x - width / 2) < 30:
+            self.x = width/2 + 30
+        elif (self.x + width / 2) > self.screen_width - 30:
+            self.x = self.screen_width - width/2 - 30
+
+        if (self.y - height / 2) < 60:
+            self.y = height/2 + 60
+        elif (self.y + height / 2) > self.screen_height - 60:
+            self.y = self.screen_height - height/2 - 60
+
+    def copy(self):
+        return copy.copy(self)

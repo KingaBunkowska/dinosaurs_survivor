@@ -6,7 +6,7 @@ from game_mechanics.Coin import Coin
 
 class Player(Entity):
     def __init__(self):
-        super().__init__(statistics=Statistics(speed=10,hp = 3., contact_damage=0.),facing_right=True)
+        super().__init__(statistics=Statistics(speed=10,hp = 10., contact_damage=0.),facing_right=True)
         self.invincibility = 0
         self.experience = 0
         self.level = 1
@@ -37,4 +37,8 @@ class Player(Entity):
         else:
             self.statistics.damage_up(value)
 
-
+    def increase_max_health(self, value):
+        percent_of_change = (self.statistics.max_hp + value)/self.statistics.max_hp
+        self.statistics.max_hp += value
+        self.statistics.hp *= percent_of_change 
+       
