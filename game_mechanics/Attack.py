@@ -1,3 +1,5 @@
+import random
+
 from game_mechanics.Position import Position
 import math
 
@@ -6,7 +8,7 @@ class Attack:
     superclass for any form of attack
     """
 
-    def __init__(self, target, caster,speed = 8,range = float('inf'), penetrate=False):
+    def __init__(self, target, caster,speed = 8,range = float('inf'), penetrate=True, accuracy = 0):
         """
         :param target: coordinates of target
         :type target: Position
@@ -24,6 +26,7 @@ class Attack:
         :type penetrate: bool
         """
         self.position = caster.position
+        self.accuracy = accuracy
         self.angle, self.direction = self.calculate_angle(target)
 
         self.caster = caster
@@ -31,6 +34,7 @@ class Attack:
         self.range = range
         self.speed = speed
         self.attacked = set()
+
 
     def calculate_dammage(self,target):
         """
@@ -40,11 +44,10 @@ class Attack:
         :rtype: float
         """
         # TODO : connect to the statistics system
-        if target in self.attacked and not self.penetrate:
+        if target in self.attacked:
             return 0
-        else:
-            self.attacked.add(target)
-            return 1.
+        self.attacked.add(target)
+        return 1.
 
     def calculate_angle(self,target):
         """
@@ -55,9 +58,9 @@ class Attack:
         :rtype: (float, float)
         """
 
-        vector = self.position - target
+        vector = target - self.position
         vector.normalized()
-        vector *= -1
+        vector += Position(random.randint(-self.accuracy,self.accuracy),random.randint(-self.accuracy,self.accuracy))
         return math.degrees(math.atan2(-vector.y, vector.x)), vector
     def fly(self):
         """

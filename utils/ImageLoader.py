@@ -26,6 +26,10 @@ class ImageLoader():
             return path.lower().endswith('.png')
 
         try:
+            with open(os.path.join(path, "player","image_size.json"),"r") as json_player:
+                sizes["player"] = json.load(json_player)
+            images["player"] = pygame.transform.scale(pygame.image.load(os.path.join(path, "player","miner.png")),[sizes["player"]["image_height"],sizes["player"]["image_width"]])
+
             dinosaurs_path = os.path.join(path, "dinosaurs")
             for entity_type in os.listdir(dinosaurs_path):
                 directory_path = os.path.join(dinosaurs_path, entity_type)
@@ -58,10 +62,10 @@ class ImageLoader():
                         if __is_png_file(os.path.join(directory_path, file_name)):
                             images[file_name[:-4]] = pygame.transform.scale(pygame.image.load(os.path.join(directory_path, file_name)),[size["image_height"],size["image_width"]])
 
-            pickable_path = os.path.join(path, "projectile")
-            for item in os.listdir(pickable_path):
-                directory_path = os.path.join(pickable_path, item, "images")
-                json_path = os.path.join(pickable_path, item, "image_size.json")
+            projectile_path = os.path.join(path, "projectile")
+            for item in os.listdir(projectile_path):
+                directory_path = os.path.join(projectile_path, item, "images")
+                json_path = os.path.join(projectile_path, item, "image_size.json")
                 if os.path.isdir(directory_path) and os.path.exists(json_path):
 
                     with open(json_path, "r") as json_path:
@@ -123,6 +127,14 @@ class ImageLoader():
             return images.get(projectile_name)
 
         raise ImagesNotFoundException("Image for", projectile_name, "was not found")
+
+    @staticmethod
+    def get_player_sprite():
+        return images["player"]
+
+    @staticmethod
+    def get_player_hitbox():
+        return [sizes["player"]["hitbox_start_x"],sizes["player"]["hitbox_start_y"],sizes["player"]["hitbox_width"],sizes["player"]["hitbox_height"]]
 
 class ImagesNotFoundException(Exception):
     pass

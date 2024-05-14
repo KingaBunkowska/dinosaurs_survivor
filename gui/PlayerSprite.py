@@ -1,20 +1,29 @@
 from gui.EntitySprite import EntitySprite
 from game_mechanics.Player import Player
 from game_mechanics.Position import Position
+from utils.ImageLoader import ImageLoader
 import pygame
 
 
 class PlayerSprite(EntitySprite):
     def __init__(self, player:Player):
-        super().__init__(player, None, hitbox_size=(50, 100))
+        image = ImageLoader.get_player_sprite()
+        hitbox_start = [None, None]
+        hitbox_size = [None, None]
+        hitbox_start[0], hitbox_start[1], hitbox_size[0],hitbox_size[1] = ImageLoader.get_player_hitbox()
+        super().__init__(player, image, hitbox_size, hitbox_start)
 
     def draw(self, screen):
-        self.hitbox = (Position(self.entity.position.x - self.size[0] / 2, self.entity.position.y - self.size[1] / 2),
-                       Position(self.entity.position.x + self.size[0] / 2, self.entity.position.y + self.size[1] / 2))
-        color = (255,0,0)
-        width = 25
-        height = 50
+        self.hitbox = (Position(self.hitbox_start[0] - self.hitbox_size[0],
+                                self.hitbox_start[1] - self.hitbox_size[1]) + self.entity.get_position(),
+                       Position(self.hitbox_start[0], self.hitbox_start[1]) + self.entity.get_position())
+
         if self.entity.invincibility % 10 < 5:
-            pygame.draw.rect(screen, color, pygame.Rect(super()._get_entity().position.to_coords(), [width, height]))
-        #draw player hitbox
-        # pygame.draw.rect(screen, (255, 255, 255), (self.hitbox[0].to_coords(), self.size), 2)
+            if self.entity.facing_right:
+                rotated_image = pygame.transform.flip(self.image, True, False)
+                screen.blit(rotated_image, self.entity.get_position().to_coords(*self.size))
+            else:
+                screen.blit(self.image, self.entity.get_position().to_coords(*self.size))
+
+        pygame.draw.rect(screen, (255, 0, 0),
+                         (self.hitbox[0].to_coords(), (self.hitbox[1] - self.hitbox[0]).to_coords()), 2)
