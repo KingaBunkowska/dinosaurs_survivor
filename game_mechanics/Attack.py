@@ -25,7 +25,7 @@ class Attack:
         :param penetrate: whether projectile pierce enemy or not TODO: implement piercing
         :type penetrate: bool
         """
-        self.position = caster.position
+        self.position = caster.position.copy()
         self.accuracy = accuracy
         self.angle, self.direction = self.calculate_angle(target)
 
@@ -62,6 +62,7 @@ class Attack:
         vector.normalized()
         vector += Position(random.uniform(-self.accuracy,self.accuracy),random.uniform(-self.accuracy,self.accuracy))
         return math.degrees(math.atan2(-vector.y, vector.x)), vector
+    
     def fly(self):
         """
         Move projectile in space and reduce remaining range

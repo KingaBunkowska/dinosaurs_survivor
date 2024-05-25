@@ -10,6 +10,7 @@ class Player(Entity):
         self.invincibility = 0
         self.experience = 0
         self.level = 1
+        self.last_level_reward = 1
         self.inventory = Inventory()
         self.level_function = lambda x: x**(7/6)
 
