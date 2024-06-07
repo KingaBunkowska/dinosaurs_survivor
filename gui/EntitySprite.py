@@ -1,6 +1,7 @@
 from game_mechanics.Entity import Entity
 from game_mechanics.Position import Position
 import pygame
+from gui.Sprite import Sprite
 
 class EntitySprite:
     def __init__(self, entity:Entity, image, hitbox_size=(200, 200), hitbox_start=(0, 0)):
