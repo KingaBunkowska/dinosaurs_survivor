@@ -23,6 +23,9 @@ from game_mechanics.Weapons.Rifle import Rifle
 from game_mechanics.Weapons.Shotgun import Shotgun
 from game_mechanics.PickableWeapon import PickableWeapons
 from gui.PickableWeaponSprite import PickableWeaponSprite
+from game_mechanics.Weapons.Blowtorch import Blowtorch
+from game_mechanics.Weapons.Laser import Laser
+from game_mechanics.Weapons.Chakra import Chakra
 
 class Game:
     def __init__(self, screen):
@@ -33,7 +36,7 @@ class Game:
         self.player_sprite = PlayerSprite(self.player)
         self.pickable_sprites = []
         self.invincibility_frames = 100
-        self.weapon = Pistol(self.player)
+        self.weapon = Chakra(self.player)
         self.time_of_contact_damage = 10
 
         self.option = None
@@ -202,7 +205,7 @@ class Game:
             if self.weapon.__class__ == Pickaxe:
                 if option == 1:
                     self.pickable_sprites.append(
-                        PickableWeaponSprite(PickableWeapons(Position(x, y), Pistol(self.player))))
+                        PickableWeaponSprite(PickableWeapons(Position(x, y), Blowtorch(self.player))))
                 if option == 2:
                     self.pickable_sprites.append(
                         PickableWeaponSprite(PickableWeapons(Position(x, y), Pickaxe(self.player))))
