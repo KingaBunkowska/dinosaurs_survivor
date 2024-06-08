@@ -2,11 +2,11 @@ from abc import ABC, abstractmethod
 
 class Structure(ABC):
     def __init__(self, position):
-        self.position = position
+        self.position = position.copy()
         self.exist = 1
 
     @abstractmethod
-    def triger_condition(self, entity):
+    def trigger(self, entity):
         pass
 
     @abstractmethod

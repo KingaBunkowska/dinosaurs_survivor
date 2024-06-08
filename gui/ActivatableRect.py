@@ -6,6 +6,7 @@ images = {
     "heal": pygame.image.load("resources\icons\heal.png"),
     "none": pygame.image.load("resources\icons\\none.png"), 
     "fire": pygame.image.load("resources\icons\\fire.png"),
+    "spikes": pygame.image.load("resources\icons\\spikes.png"),
     "slow_down_time": pygame.image.load("resources\icons\\slow_down_time.png")
 }
 

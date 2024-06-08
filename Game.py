@@ -3,6 +3,7 @@ from game_mechanics.Dinosaur import Dinosaur
 from game_mechanics.active_abilities.Dash import Dash
 from game_mechanics.active_abilities.Fire import Fire
 from game_mechanics.active_abilities.Heal import Heal
+from game_mechanics.active_abilities.PutSpikes import PutSpikes
 from game_mechanics.active_abilities.SlowDownTime import SlowDownTime
 from gui.GameOver import GameOver
 from gui.AbilitySprite import AbilitySprite
@@ -23,6 +24,7 @@ from game_mechanics.Weapons.Rifle import Rifle
 from game_mechanics.Weapons.Shotgun import Shotgun
 from game_mechanics.PickableWeapon import PickableWeapons
 from gui.PickableWeaponSprite import PickableWeaponSprite
+from gui.StructureSprite import StructureSprite
 
 class Game:
     def __init__(self, screen):
@@ -37,7 +39,7 @@ class Game:
         self.time_of_contact_damage = 10
 
         self.option = None
-        self.active_abilities = [SlowDownTime(self.player, self), Dash(self.player)]
+        self.active_abilities = [PutSpikes(self.player, self), Dash(self.player)]
         self.active_abilities_gui = [ActivatableRect(800 + 50 * i, 20, screen, self.active_abilities[i])
                                      for i in range(2)]
 
@@ -48,6 +50,8 @@ class Game:
         self.ability_sprites_and_duration = []
         self.delayed_actions = []
         self.running = True
+
+        self.structures_sprites = []
 
     def run_tick(self):
         self.manage_game_over()
@@ -101,12 +105,16 @@ class Game:
 
             # remove projectiles that disappeared
             self.projectiles_sprites = [p for p in self.projectiles_sprites if p != None]
-
+            
             for presenter in self.projectiles_sprites:
                 presenter.draw(self.screen)
 
             if self.option != None:
                 self.option.draw(self.screen)
+
+            self.trigger_structures()
+            self.clean_structures()
+            self.draw_structures()
 
     def compare_hitbox(self, colision_point, hitbox):
         """
@@ -266,3 +274,22 @@ class Game:
         if self.player.statistics.hp <= 0:
             GameOver().draw(self.screen)
             self.running = False
+
+    def add_structure(self, structure):
+        if structure is None or structure.name is None:
+            raise ValueError("Structure do not exist or do not have name value")
+
+        if structure.name == "spikes":
+            self.structures_sprites.append(StructureSprite(structure))
+
+    def trigger_structures(self):
+        for structure_sprite in self.structures_sprites:
+            structure = structure_sprite.structure
+            structure.trigger(self.player)
+            [structure.trigger(dino_sprite.dinosaur) for dino_sprite in self.dinosaur_sprites] 
+
+    def draw_structures(self):
+        [structure.draw(self.screen) for structure in self.structures_sprites]
+
+    def clean_structures(self):
+        self.structures_sprites = [structure_sprite for structure_sprite in self.structures_sprites if structure_sprite.structure.exist]
