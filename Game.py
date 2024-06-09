@@ -26,6 +26,7 @@ from gui.PickableWeaponSprite import PickableWeaponSprite
 from game_mechanics.Weapons.Blowtorch import Blowtorch
 from game_mechanics.Weapons.Laser import Laser
 from game_mechanics.Weapons.Chakra import Chakra
+from GameMode import GameMode
 
 class Game:
     def __init__(self, screen):
@@ -36,7 +37,7 @@ class Game:
         self.player_sprite = PlayerSprite(self.player)
         self.pickable_sprites = []
         self.invincibility_frames = 100
-        self.weapon = Chakra(self.player)
+        self.weapon = Pistol(self.player)
         self.time_of_contact_damage = 10
 
         self.option = None
@@ -56,7 +57,7 @@ class Game:
         self.running = True
 
     def run_tick(self):
-        self.check_game_over()
+        # self.check_game_over()
 
         if self.running:
             self.player._use_up_invincibility()
@@ -208,7 +209,7 @@ class Game:
                         PickableWeaponSprite(PickableWeapons(Position(x, y), Blowtorch(self.player))))
                 if option == 2:
                     self.pickable_sprites.append(
-                        PickableWeaponSprite(PickableWeapons(Position(x, y), Pickaxe(self.player))))
+                        PickableWeaponSprite(PickableWeapons(Position(x, y), Chakra(self.player))))
             if self.weapon.__class__ == Rifle:
                 if option == 1:
                     self.pickable_sprites.append(
@@ -231,7 +232,6 @@ class Game:
             self.active_abilities_gui[i].draw(self.active_abilities[i].percent_of_cooldown())
 
     def draw_abilities(self):
-
         self.ability_sprites_and_duration = [ability_and_duration for ability_and_duration in self.ability_sprites_and_duration if ability_and_duration[1]>0]
         
         for i, (sprite, duration) in enumerate(self.ability_sprites_and_duration):
@@ -265,3 +265,7 @@ class Game:
         if self.player.statistics.hp <= 0:
             GameOver().draw(self.screen)
             self.running = False
+
+    def check_gamemode_change(self):
+        if self.player.statistics.hp <= 0: return GameMode.PIT
+        return None
