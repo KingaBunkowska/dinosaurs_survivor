@@ -1,3 +1,4 @@
+from game_mechanics.Boss import Boss
 from game_mechanics.Player import Player
 from game_mechanics.Dinosaur import Dinosaur
 from game_mechanics.active_abilities.Dash import Dash
@@ -5,6 +6,7 @@ from game_mechanics.active_abilities.Fire import Fire
 from game_mechanics.active_abilities.Heal import Heal
 from game_mechanics.active_abilities.PutSpikes import PutSpikes
 from game_mechanics.active_abilities.SlowDownTime import SlowDownTime
+from gui.BossSprite import BossSprite
 from gui.GameOver import GameOver
 from gui.AbilitySprite import AbilitySprite
 from gui.HealthBar import HealthBar
@@ -25,6 +27,10 @@ from game_mechanics.Weapons.Shotgun import Shotgun
 from game_mechanics.PickableWeapon import PickableWeapons
 from gui.PickableWeaponSprite import PickableWeaponSprite
 from gui.StructureSprite import StructureSprite
+
+import sys
+
+sys.setrecursionlimit(100)
 
 class Game:
     def __init__(self, screen):
@@ -48,10 +54,12 @@ class Game:
 
         self.health_bar_gui = HealthBar(50, 30, self.player.statistics.max_hp, self.screen)
         self.ability_sprites_and_duration = []
-        self.delayed_actions = []
+        self.delayed_actions = [] #[method, ticks_from_now_to_use]
         self.running = True
 
         self.structures_sprites = []
+
+        self.delayed_actions.append([self.spawn_boss, 200])
 
     def run_tick(self):
         self.manage_game_over()
@@ -293,3 +301,6 @@ class Game:
 
     def clean_structures(self):
         self.structures_sprites = [structure_sprite for structure_sprite in self.structures_sprites if structure_sprite.structure.exist]
+
+    def spawn_boss(self):
+        self.dinosaur_sprites.append(BossSprite(Boss(self)))

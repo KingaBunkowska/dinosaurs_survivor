@@ -11,8 +11,8 @@ class Statistics:
         self.attack = 10
         self.defense = 10
 
-    def changed_by(self, speed = 0):
-        return Statistics(self.speed + speed, self.hp, self.contact_damage)
+    def changed_by(self, speed = 0, hp = 0, contact_damage = 0):
+        return Statistics(self.speed + speed, self.hp + hp, self.contact_damage + contact_damage)
 
     def speed_up(self,val):
         self.speed += val

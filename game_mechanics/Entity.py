@@ -49,9 +49,12 @@ class Entity:
         return self.statistics.hp < 0
 
     def _use_up_invincibility(self):
+        to_delete = []
         for dealer in self.invincibility.keys():
             # cleaning directory if dealer did not deal damage for 60000 ticks (100s for 60FPS)
             if dealer.is_dead() or self.invincibility[dealer] < -60000:
-                self.invincibility.pop(dealer)
+                to_delete.append(dealer)
             else:
                 self.invincibility[dealer] -= 1
+
+        [self.invincibility.pop(dealer) for dealer in to_delete]

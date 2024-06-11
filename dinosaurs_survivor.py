@@ -23,10 +23,12 @@ def handle_events():
                     print("Dev mode activated")
                 else:
                     print("Dev mode deactivated")
+        
+        available_types = [d for d in DinosaurType if d != DinosaurType.POLONOSUCHUS]
         if dev_mode == 1 and event.type == pygame.MOUSEBUTTONDOWN:
-            game._add_dinosaur(Dinosaur(type=random.choice(list(DinosaurType)), position=Position(*event.pos)))
+            game._add_dinosaur(Dinosaur(type=random.choice(available_types), position=Position(*event.pos)))
         elif dev_mode == 1 and event.type == pygame.KEYUP and event.key == pygame.K_t:
-            game._add_dinosaur(Dinosaur(type=random.choice(list(DinosaurType)), position=Position(*pygame.mouse.get_pos()), friendly=True))
+            game._add_dinosaur(Dinosaur(type=random.choice(available_types), position=Position(*pygame.mouse.get_pos()), friendly=True))
         elif dev_mode == 1 and event.type == pygame.KEYUP and event.key == pygame.K_h:
             game.player.increase_max_health(10)
 
