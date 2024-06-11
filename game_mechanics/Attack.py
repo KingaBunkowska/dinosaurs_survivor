@@ -34,6 +34,7 @@ class Attack:
         self.range = range
         self.speed = speed
         self.attacked = set()
+        self.target = target
 
 
     def calculate_dammage(self,target):

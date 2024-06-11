@@ -3,8 +3,8 @@ from game_mechanics.Position import Position
 class Entity:
 
     invincibility_base_time = 60
-
-    def __init__(self, statistics = None, position = Position(200, 200), facing_right=False):
+  
+    def __init__(self, statistics = None, position = Position(750, 330), facing_right=False):
         self.statistics = statistics
         self.position = position
         self.original_facing_right = facing_right

@@ -8,6 +8,7 @@ from game_mechanics.active_abilities.Fire import Fire
 from game_mechanics.active_abilities.Heal import Heal
 from game_mechanics.active_abilities.PutSpikes import PutSpikes
 from game_mechanics.active_abilities.SlowDownTime import SlowDownTime
+from gui.StructureSprite import StructureSprite
 from gui.BossSprite import BossSprite
 from gui.GameOver import GameOver
 from gui.AbilitySprite import AbilitySprite
@@ -28,17 +29,17 @@ from game_mechanics.Weapons.Rifle import Rifle
 from game_mechanics.Weapons.Shotgun import Shotgun
 from game_mechanics.PickableWeapon import PickableWeapons
 from gui.PickableWeaponSprite import PickableWeaponSprite
-from gui.StructureSprite import StructureSprite
-
-import sys
-
+from game_mechanics.Weapons.Blowtorch import Blowtorch
+from game_mechanics.Weapons.Laser import Laser
+from game_mechanics.Weapons.Chakra import Chakra
+from GameMode import GameMode
 from utils.PositionGenerator import PositionGenerator
 
-sys.setrecursionlimit(100)
-
 class Game:
-    def __init__(self, screen):
+    def __init__(self, screen, inventory):
         self.player = Player()
+        self.inventory = inventory
+        self.inventory.new_player(self.player)
         self.dinosaur_sprites = []
         self.screen = screen
         self.projectiles_sprites = []
@@ -71,7 +72,7 @@ class Game:
         self.spawn_dinosaur()
 
     def run_tick(self):
-        self.manage_game_over()
+        # self.check_game_over()
         if self.running:
             self.ticks_from_start += 1
             self.ticks_from_spawn += 1
@@ -186,7 +187,7 @@ class Game:
 
         for i,pickable in enumerate(self.pickable_sprites):
             if self.compare_hitbox(pickable.hitbox,self.player_sprite.hitbox):
-                pickable.item.onPick(self)
+                pickable.item.onPick(self.inventory)
                 self.pickable_sprites[i] = None
 
         to_del = []
@@ -234,10 +235,10 @@ class Game:
             if self.weapon.__class__ == Pickaxe:
                 if option == 1:
                     self.pickable_sprites.append(
-                        PickableWeaponSprite(PickableWeapons(Position(x, y), Pistol(self.player))))
+                        PickableWeaponSprite(PickableWeapons(Position(x, y), Blowtorch(self.player))))
                 if option == 2:
                     self.pickable_sprites.append(
-                        PickableWeaponSprite(PickableWeapons(Position(x, y), Pickaxe(self.player))))
+                        PickableWeaponSprite(PickableWeapons(Position(x, y), Chakra(self.player))))
             if self.weapon.__class__ == Rifle:
                 if option == 1:
                     self.pickable_sprites.append(
@@ -263,7 +264,6 @@ class Game:
             self.active_abilities_gui[i].draw(self.active_abilities[i].percent_of_cooldown())
 
     def draw_abilities(self):
-
         self.ability_sprites_and_duration = [ability_and_duration for ability_and_duration in self.ability_sprites_and_duration if ability_and_duration[1]>0]
         
         for i, (sprite, duration) in enumerate(self.ability_sprites_and_duration):
@@ -298,6 +298,12 @@ class Game:
             GameOver().draw(self.screen)
             self.running = False
 
+    def check_gamemode_change(self):
+        if self.player.statistics.hp <= 0: return GameMode.PIT
+        return None
+
+    def click_buttons(self,click_pos):
+        pass
     def add_structure(self, structure):
         if structure is None or structure.name is None:
             raise ValueError("Structure do not exist or do not have name value")
@@ -323,3 +329,10 @@ class Game:
     def spawn_dinosaur(self):
         available_types = [d for d in DinosaurType if d != DinosaurType.POLONOSUCHUS]
         self._add_dinosaur(Dinosaur(type=random.choice(available_types), position=PositionGenerator.generate_near_border_position()))
+
+    def check_gamemode_change(self):
+        if self.player.statistics.hp <= 0: return GameMode.PIT
+        return None
+
+    def click_buttons(self,click_pos):
+        pass
