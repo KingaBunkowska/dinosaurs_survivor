@@ -7,7 +7,7 @@ class ButtonSprite:
         self.font = pygame.font.Font(None, 64)
         self.text = text
 
-        self.button_rect = pygame.Rect((pos.x + button_width//2) // 2, (pos.y + button_height//2) // 2,
+        self.button_rect = pygame.Rect((pos.x + button_width//2) // 2 + 50, (pos.y + button_height//2) // 2 + 50,
                                   button_width, button_height)
 
     def draw(self,screen):

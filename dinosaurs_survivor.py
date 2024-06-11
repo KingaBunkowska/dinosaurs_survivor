@@ -60,11 +60,11 @@ def handle_player_input():
         game.use_ability(1)
 
     option = 0
-    if keys[pygame.K_1]:
+    if keys[pygame.K_4]:
         option = 1
-    elif keys[pygame.K_2]:
+    elif keys[pygame.K_5]:
         option = 2
-    elif keys[pygame.K_3]:
+    elif keys[pygame.K_6]:
         option = 3
 
     if game_mode != GameMode.MENU:

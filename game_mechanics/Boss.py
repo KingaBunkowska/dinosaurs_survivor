@@ -30,7 +30,7 @@ class Boss(Dinosaur):
                 if ability.can_use() and random.randint(0,4)==0:
                     self.using_ability_in = 30
                     self.ability_to_use = ability
-                ability.use()
+                # ability.use()
 
     def move(self, player_position: Position, dinosaurs):
         self.use_abilities()

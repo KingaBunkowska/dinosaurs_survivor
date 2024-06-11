@@ -47,6 +47,7 @@ class Game:
         self.pickable_sprites = []
         self.invincibility_frames = 100
         self.weapon = Pistol(self.player)
+        self.inventory.pistol_upgrade(self.weapon)
         self.time_of_contact_damage = 10
 
         self.option = None
@@ -225,27 +226,35 @@ class Game:
         if self.player.level == 5 and self.player.last_level_reward == 4:
             if option == 1:
                 # self.weapon = Rifle(self.player)
-                self.pickable_sprites.append(PickableWeaponSprite(PickableWeapons(Position(x,y),Rifle(self.player))))
+                self.pickable_sprites.append(PickableWeaponSprite(PickableWeapons(Position(x,y),self.inventory.rifle_upgrade(Rifle(self.player)))))
             if option == 2:
                 # self.weapon = Pickaxe(self.player)
                 self.pickable_sprites.append(
-                    PickableWeaponSprite(PickableWeapons(Position(x, y), Pickaxe(self.player))))
+                    PickableWeaponSprite(PickableWeapons(Position(x, y), self.inventory.pickaxe_upgrade(Pickaxe(self.player)))))
             self.player.last_level_reward += 1
         if self.player.level == 10 and self.player.last_level_reward == 9:
             if self.weapon.__class__ == Pickaxe:
                 if option == 1:
+                    blowtorch = Blowtorch(self.player)
+                    self.inventory.blowtorch_upgrade()
                     self.pickable_sprites.append(
-                        PickableWeaponSprite(PickableWeapons(Position(x, y), Blowtorch(self.player))))
+                        PickableWeaponSprite(PickableWeapons(Position(x, y), blowtorch)))
                 if option == 2:
+                    chakra = Chakra(self.player)
+                    self.inventory.chakra_upgrade()
                     self.pickable_sprites.append(
-                        PickableWeaponSprite(PickableWeapons(Position(x, y), Chakra(self.player))))
+                        PickableWeaponSprite(PickableWeapons(Position(x, y), chakra)))
             if self.weapon.__class__ == Rifle:
                 if option == 1:
+                    laser = Laser(self.player)
+                    self.inventory.laser_upgrade()
                     self.pickable_sprites.append(
-                        PickableWeaponSprite(PickableWeapons(Position(x, y), Pistol(self.player))))
+                        PickableWeaponSprite(PickableWeapons(Position(x, y), laser)))
                 if option == 2:
+                    shotgun = Shotgun(self.player)
+                    self.inventory.shotgun_upgrade()
                     self.pickable_sprites.append(
-                        PickableWeaponSprite(PickableWeapons(Position(x, y), Shotgun(self.player))))
+                        PickableWeaponSprite(PickableWeapons(Position(x, y), shotgun)))
             print(self.weapon.accuracy, self.weapon.attack_nr)
             self.player.last_level_reward += 1
 

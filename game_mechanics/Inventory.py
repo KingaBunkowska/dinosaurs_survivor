@@ -2,7 +2,7 @@ from game_mechanics.Weapons.Pistol import Pistol
 from game_mechanics.Courences import Courences
 class Inventory:
     def __init__(self):
-        self.money = {Courences.GOLD : 24}
+        self.money = {Courences.GOLD : 0}
         self.player = None
         self.upgrades = {"gold" : False,"crit" : False,"def" : False,"contact" : False,"pickup" : False,"mul" : False, "pistol" : False, "rifle" : False, "shotgun" : False, "laser" : False, "pickaxe" : False, "blowtorch" : False, "chakra" : False, }
 

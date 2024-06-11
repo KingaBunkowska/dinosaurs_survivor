@@ -19,7 +19,7 @@ class OfferSprite:
         if self.button_rect.collidepoint(pygame.mouse.get_pos()):
             pygame.draw.rect(screen, self.pick_bg_colors[self.type],self.button_rect, border_radius=20)
         else:
-            pygame.draw.rect(screen, self.bg_colors[self.type], self.button_rect, border_radius=200)
+            pygame.draw.rect(screen, self.bg_colors[self.type], self.button_rect, border_radius=40)
 
         screen.blit(self.value_image[0], (self.pos.x + 5,self.pos.y + 5))
         screen.blit(self.value[0],(self.pos.x + 35,self.pos.y + 12))

@@ -1,6 +1,8 @@
 from game_mechanics.Position import Position
 from gui.OfferSprite import OfferSprite
 from game_mechanics.ShopKeeper import ShopKeeper
+from game_mechanics.Courences import Courences
+from utils.ImageLoader import ImageLoader
 import pygame
 
 class ShopInterface:
@@ -9,6 +11,8 @@ class ShopInterface:
         self.keeper = keeper
         # self.offers = [OfferSprite(self.offers_pos[0],),OfferSprite(self.offers_pos[1],[(12,1)],"",None,0),OfferSprite(self.offers_pos[2],[(12,1)],"",None,0),OfferSprite(self.offers_pos[3],[(12,1)],"",None,0),OfferSprite(self.offers_pos[4],[(12,1)],"",None,1),OfferSprite(self.offers_pos[5],[(12,1)],"",None,1),OfferSprite(self.offers_pos[6],[(12,1)],"",None,2)]
         self.offers = [OfferSprite(self.offers_pos[i],*args) for i,args in enumerate(self.keeper.stock)]
+        self.info_font = pygame.font.SysFont(None, 40)
+        self.courency_image = {Courences.GOLD: ImageLoader.get_pickable_sprite(Courences.GOLD.value[0])}
     def draw(self,screen):
         width, height = screen.get_width(), screen.get_height()
         overlay = pygame.Surface((int(width * 0.9),int(height * 0.9)))
@@ -16,6 +20,10 @@ class ShopInterface:
         overlay.set_alpha(200)
         pygame.draw.rect(screen,(255,0,255),[230,230,150,150])
         screen.blit(overlay, (int(width * 0.05), int(height * 0.05)))
+
+        screen.blit(self.courency_image[Courences.GOLD],(int(width * 0.05) + 20,int(height * 0.05) + 20))
+        screen.blit(self.info_font.render(str(self.keeper.inventory.money[Courences.GOLD]), True, (0, 0, 0)), (int(width * 0.05) + 60,int(height * 0.05) + 25))
+
         for offer in self.offers:
             offer.draw(screen)
 
