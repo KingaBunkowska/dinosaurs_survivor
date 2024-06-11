@@ -14,5 +14,5 @@ class Chakra(Weapon):
         """
         projectiles = []
         for i in range(self.attack_nr):
-            projectiles.append(AttackChakra(target, self.owner, self.range))
+            projectiles.append(AttackChakra(target, self.owner, self.range,self.speed))
         return projectiles, "blade"

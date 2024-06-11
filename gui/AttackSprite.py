@@ -16,8 +16,8 @@ class AttackSprite:
         self.attack = attack
         self.rotate = False
         if attack_type != "laser":
-            if attack_type == "blade":
-                self.rotate = True
+            # if attack_type == "blade":
+                # self.rotate = True
             self.colision_counter = -1
             self.image = ImageLoader.get_projectile_sprite(attack_type)
             self.image = pygame.transform.rotate(self.image, attack.angle)

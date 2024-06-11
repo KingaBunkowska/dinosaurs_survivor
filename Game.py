@@ -29,8 +29,10 @@ from game_mechanics.Weapons.Chakra import Chakra
 from GameMode import GameMode
 
 class Game:
-    def __init__(self, screen):
+    def __init__(self, screen, inventory):
         self.player = Player()
+        self.inventory = inventory
+        self.inventory.new_player(self.player)
         self.dinosaur_sprites = []
         self.screen = screen
         self.projectiles_sprites = []
@@ -160,7 +162,7 @@ class Game:
 
         for i,pickable in enumerate(self.pickable_sprites):
             if self.compare_hitbox(pickable.hitbox,self.player_sprite.hitbox):
-                pickable.item.onPick(self)
+                pickable.item.onPick(self.inventory)
                 self.pickable_sprites[i] = None
 
         to_del = []
@@ -269,3 +271,6 @@ class Game:
     def check_gamemode_change(self):
         if self.player.statistics.hp <= 0: return GameMode.PIT
         return None
+
+    def click_buttons(self,click_pos):
+        pass

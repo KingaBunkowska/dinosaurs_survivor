@@ -11,6 +11,7 @@ from gui.menu.ButtonSprite import ButtonSprite
 from Pit import Pit
 from Menu import Menu
 from GameMode import GameMode
+from game_mechanics.Inventory import Inventory
 
 def handle_events():
     global running, dev_mode
@@ -75,6 +76,7 @@ if __name__ == "__main__":
     clock = pygame.time.Clock()
     pygame.init()
     imageL = ImageLoader()
+    inventory = Inventory()
 
     # screen_width, screen_height = pygame.display.Info().current_w, pygame.display.Info().current_h
     screen_width, screen_height = 1360, 748
@@ -102,11 +104,11 @@ if __name__ == "__main__":
         if prev_game_mode != game_mode:
             prev_game_mode = game_mode
             if game_mode == GameMode.PIT:
-                game = Pit(screen)
+                game = Pit(screen,inventory)
             elif game_mode == GameMode.GAME:
-                game = Game(screen)
+                game = Game(screen,inventory)
             elif game_mode == GameMode.MENU:
-                game = Pit(screen)
+                game = Pit(screen,inventory)
 
         handle_events()
         handle_player_input()

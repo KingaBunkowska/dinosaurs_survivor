@@ -3,7 +3,7 @@ from game_mechanics.Attack import Attack
 import math
 
 class AttackChakra(Attack):
-    def __init__(self,target, caster, range):
+    def __init__(self,target, caster, range, speed):
         super().__init__(target, caster, speed=4, range = range, penetrate=True)
         self.range = range
         self.max_range = range//2
