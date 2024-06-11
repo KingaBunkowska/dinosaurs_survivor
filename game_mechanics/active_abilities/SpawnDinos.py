@@ -8,7 +8,7 @@ class SpawnDinos(ActiveAbility):
     def __init__(self, target, game):
         self.name = "spawn"
         self.game = game
-        cooldown = 9000
+        cooldown = 2000
         usage = 3
 
         super().__init__(cooldown, usage, target)
@@ -16,6 +16,5 @@ class SpawnDinos(ActiveAbility):
     def use(self):
         if self.can_use():
             for _ in range(random.randint(2,8)):
-                print("used")
-                # self.game._add_dinosaur(Dinosaur(DinosaurType.SILESAURUS, False, position=self.target.position + Position(random.randint(-100, 100), random.randint(-40, 40))))
+                self.game._add_dinosaur(Dinosaur(DinosaurType.SILESAURUS, False, position=self.target.position + Position(random.randint(-300, 300), random.randint(-40, 40))))
             self.consume()

@@ -59,7 +59,7 @@ class Game:
 
         self.structures_sprites = []
 
-        self.delayed_actions.append([self.spawn_boss, 200])
+        self.delayed_actions.append([self.spawn_boss, 10800]) # po 3 minutach boss
 
     def run_tick(self):
         self.manage_game_over()
