@@ -1,4 +1,6 @@
-class ActiveAbility:
+from abc import ABC, abstractmethod
+
+class ActiveAbility(ABC):
 
     def __init__(self, cooldown=60, usage=None, target=None):
         self.cooldown = cooldown
@@ -25,3 +27,7 @@ class ActiveAbility:
     
     def can_use(self):
         return self.active and (self.usages_left == None or self.usages_left > 0)
+    
+    @abstractmethod
+    def use(self):
+        pass

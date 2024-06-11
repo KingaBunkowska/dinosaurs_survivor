@@ -51,29 +51,28 @@ class Game:
             gui.set_image(self.active_abilities[i])
 
         self.health_bar_gui = HealthBar(50, 30, self.player.statistics.max_hp, self.screen)
-        
         self.ability_sprites_and_duration = []
-
         self.delayed_actions = []
-
         self.running = True
 
     def run_tick(self):
         # self.check_game_over()
-
         if self.running:
             self.player._use_up_invincibility()
             self.do_delayed_actions()
             self.draw_abilities()
             self.draw_gui()
-
             self.player_attack()
             self.check_collisions()
 
-            enemy_dinosaurs = [dinosaur_sprite for dinosaur_sprite in self.dinosaur_sprites if not dinosaur_sprite.dinosaur.ally]
+            for dinosaur_sprite in self.dinosaur_sprites:
+                dinosaur_sprite.dinosaur._use_up_invincibility()
+
+            enemy_dinosaurs_sprites = [dinosaur_sprite for dinosaur_sprite in self.dinosaur_sprites if not dinosaur_sprite.dinosaur.ally]
+        
 
             for i,dino in enumerate(self.dinosaur_sprites):
-                dino.entity.move(self.player.position, [dino_sprite.dinosaur for dino_sprite in enemy_dinosaurs])
+                dino.entity.move(self.player.position, [dino_sprite.dinosaur for dino_sprite in enemy_dinosaurs_sprites])
                 if dino.entity.statistics.hp <= 0:
                     self.pickable_sprites.append(dino.entity.DropItems())
                     self.dinosaur_sprites[i] = None
@@ -141,24 +140,24 @@ class Game:
                 if not (rect1[0].x > rect2[1].x or rect2[0].x > rect1[1].x or
                         rect1[0].y > rect2[1].y or rect2[0].y > rect1[1].y):
                     self.player._receive_damage(dinosaur.entity.statistics.contact_damage, self.invincibility_frames)
-                    dinosaur.entity._receive_damage(self.player.statistics.contact_damage)
+                    dinosaur.entity._receive_damage(self.player.statistics.contact_damage, self.player)
                     break
 
         self.time_of_contact_damage += 1
-        if self.time_of_contact_damage % 40 == 0:
+        # if self.time_of_contact_damage % 40 == 0:
         
-            for ally_sprite in ally_sprites:
-                rect1 = ally_sprite.hitbox
+        for ally_sprite in ally_sprites:
+            rect1 = ally_sprite.hitbox
 
-                dinosaurs_hitted = 0
-                
-                for enemy_sprite in enemy_sprites:
-                    rect2 = enemy_sprite.hitbox
-                    if (not (rect1[0].x > rect2[1].x or rect2[0].x > rect1[1].x or
-                            rect1[0].y > rect2[1].y or rect2[0].y > rect1[1].y) and
-                            dinosaurs_hitted<3):
-                        dinosaurs_hitted += 1
-                        enemy_sprite.dinosaur._receive_damage(ally_sprite.dinosaur.statistics.contact_damage)
+            dinosaurs_hitted = 0
+            
+            for enemy_sprite in enemy_sprites:
+                rect2 = enemy_sprite.hitbox
+                if (not (rect1[0].x > rect2[1].x or rect2[0].x > rect1[1].x or
+                        rect1[0].y > rect2[1].y or rect2[0].y > rect1[1].y) and
+                        dinosaurs_hitted<3):
+                    dinosaurs_hitted += 1
+                    enemy_sprite.dinosaur._receive_damage(ally_sprite.dinosaur.statistics.contact_damage, ally_sprite.dinosaur)
 
         for i,pickable in enumerate(self.pickable_sprites):
             if self.compare_hitbox(pickable.hitbox,self.player_sprite.hitbox):
@@ -192,11 +191,12 @@ class Game:
 
     def make_option(self):
         self.option = LevelUpMenu(self.player.level)
+
     def resolve_option(self,option):
         x, y = self.screen.get_size()
-        x, y =x//2, y //2
+        x, y = x//2, y //2
 
-        if self.player.level == 5:
+        if self.player.level == 5 and self.player.last_level_reward == 4:
             if option == 1:
                 # self.weapon = Rifle(self.player)
                 self.pickable_sprites.append(PickableWeaponSprite(PickableWeapons(Position(x,y),Rifle(self.player))))
@@ -204,7 +204,8 @@ class Game:
                 # self.weapon = Pickaxe(self.player)
                 self.pickable_sprites.append(
                     PickableWeaponSprite(PickableWeapons(Position(x, y), Pickaxe(self.player))))
-        if self.player.level == 10:
+            self.player.last_level_reward += 1
+        if self.player.level == 10 and self.player.last_level_reward == 9:
             if self.weapon.__class__ == Pickaxe:
                 if option == 1:
                     self.pickable_sprites.append(
@@ -220,8 +221,11 @@ class Game:
                     self.pickable_sprites.append(
                         PickableWeaponSprite(PickableWeapons(Position(x, y), Shotgun(self.player))))
             print(self.weapon.accuracy, self.weapon.attack_nr)
-        if self.player.level != 5 and self.player.level != 10:
-            self.player.stat_up(5,option)
+            self.player.last_level_reward += 1
+
+        if self.player.level != 5 and self.player.level != 10 and self.player.last_level_reward < self.player.level:
+            self.player.stat_up(5, option)
+            self.player.last_level_reward += 1
         self.option = None
 
     def draw_gui(self) -> None:
@@ -263,7 +267,7 @@ class Game:
 
         self.delayed_actions = [action_and_dur for action_and_dur in self.delayed_actions if action_and_dur[1]>=0]
 
-    def check_game_over(self):
+    def manage_game_over(self):
         if self.player.statistics.hp <= 0:
             GameOver().draw(self.screen)
             self.running = False

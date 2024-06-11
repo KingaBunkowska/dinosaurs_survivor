@@ -10,8 +10,9 @@ class Statistics:
         self.critical_multiplier = 1.5
         self.attack = 10
         self.defense = 10
+
     def changed_by(self, speed = 0):
-        return Statistics(self.speed + speed)
+        return Statistics(self.speed + speed, self.hp, self.contact_damage)
 
     def speed_up(self,val):
         self.speed += val
