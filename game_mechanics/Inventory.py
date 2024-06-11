@@ -7,7 +7,7 @@ class Inventory:
         self.upgrades = {"gold" : False,"crit" : False,"def" : False,"contact" : False,"pickup" : False,"mul" : False, "pistol" : False, "rifle" : False, "shotgun" : False, "laser" : False, "pickaxe" : False, "blowtorch" : False, "chakra" : False, }
 
     def money_add(self,value):
-        self.money += int(value * (1.5 if self.upgrades["gold"] else 1.))
+        self.money[Courences.GOLD] += int(value * (1.5 if self.upgrades["gold"] else 1.))
     def pistol_upgrade(self,pistol):
         if self.upgrades["pistol"]: pistol.attack_nr = 2
     def rifle_upgrade(self,rifle):
