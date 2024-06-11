@@ -6,6 +6,7 @@ from utils.ImageLoader import ImageLoader
 import random
 from game_mechanics.DinosaurType import DinosaurType
 import pygame
+from utils.PositionGenerator import PositionGenerator
 
 def handle_events():
     global running, dev_mode
@@ -65,11 +66,12 @@ if __name__ == "__main__":
     FPS = 60
     clock = pygame.time.Clock()
     pygame.init()
-    imageL = ImageLoader()
+    image_l = ImageLoader()
+    
 
     # screen_width, screen_height = pygame.display.Info().current_w, pygame.display.Info().current_h
     screen_width, screen_height = 1360, 748
-
+    pos_gen = PositionGenerator(screen_width, screen_height)
     # screen = pygame.display.set_mode((screen_width, screen_height), pygame.FULLSCREEN)
     screen = pygame.display.set_mode((screen_width, screen_height))
     pygame.display.set_caption("Dinosaur Survivor")

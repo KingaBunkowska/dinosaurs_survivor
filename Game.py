@@ -1,4 +1,6 @@
+import random
 from game_mechanics.Boss import Boss
+from game_mechanics.DinosaurType import DinosaurType
 from game_mechanics.Player import Player
 from game_mechanics.Dinosaur import Dinosaur
 from game_mechanics.active_abilities.Dash import Dash
@@ -30,6 +32,8 @@ from gui.StructureSprite import StructureSprite
 
 import sys
 
+from utils.PositionGenerator import PositionGenerator
+
 sys.setrecursionlimit(100)
 
 class Game:
@@ -60,10 +64,17 @@ class Game:
         self.structures_sprites = []
 
         self.delayed_actions.append([self.spawn_boss, 10800]) # po 3 minutach boss
+        self.ticks_from_start = 0
+        self.ticks_from_spawn = 0
+
+        [self._add_dinosaur(Dinosaur(DinosaurType.SILESAURUS, False, position=PositionGenerator.generate_near_border_position())) for _ in range(2)]
+        self.spawn_dinosaur()
 
     def run_tick(self):
         self.manage_game_over()
         if self.running:
+            self.ticks_from_start += 1
+            self.ticks_from_spawn += 1
             self.player._use_up_invincibility()
             self.do_delayed_actions()
             self.draw_abilities()
@@ -73,6 +84,10 @@ class Game:
 
             for dinosaur_sprite in self.dinosaur_sprites:
                 dinosaur_sprite.dinosaur._use_up_invincibility()
+
+            if random.randint(300, 600) < self.ticks_from_spawn:
+                self.spawn_dinosaur()
+                self.ticks_from_spawn = 0
 
             enemy_dinosaurs_sprites = [dinosaur_sprite for dinosaur_sprite in self.dinosaur_sprites if not dinosaur_sprite.dinosaur.ally]
         
@@ -304,3 +319,7 @@ class Game:
 
     def spawn_boss(self):
         self.dinosaur_sprites.append(BossSprite(Boss(self)))
+
+    def spawn_dinosaur(self):
+        available_types = [d for d in DinosaurType if d != DinosaurType.POLONOSUCHUS]
+        self._add_dinosaur(Dinosaur(type=random.choice(available_types), position=PositionGenerator.generate_near_border_position()))
