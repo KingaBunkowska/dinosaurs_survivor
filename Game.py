@@ -23,10 +23,16 @@ from game_mechanics.Weapons.Rifle import Rifle
 from game_mechanics.Weapons.Shotgun import Shotgun
 from game_mechanics.PickableWeapon import PickableWeapons
 from gui.PickableWeaponSprite import PickableWeaponSprite
+from game_mechanics.Weapons.Blowtorch import Blowtorch
+from game_mechanics.Weapons.Laser import Laser
+from game_mechanics.Weapons.Chakra import Chakra
+from GameMode import GameMode
 
 class Game:
-    def __init__(self, screen):
+    def __init__(self, screen, inventory):
         self.player = Player()
+        self.inventory = inventory
+        self.inventory.new_player(self.player)
         self.dinosaur_sprites = []
         self.screen = screen
         self.projectiles_sprites = []
@@ -50,7 +56,7 @@ class Game:
         self.running = True
 
     def run_tick(self):
-        self.manage_game_over()
+        # self.check_game_over()
         if self.running:
             self.player._use_up_invincibility()
             self.do_delayed_actions()
@@ -155,7 +161,7 @@ class Game:
 
         for i,pickable in enumerate(self.pickable_sprites):
             if self.compare_hitbox(pickable.hitbox,self.player_sprite.hitbox):
-                pickable.item.onPick(self)
+                pickable.item.onPick(self.inventory)
                 self.pickable_sprites[i] = None
 
         to_del = []
@@ -203,10 +209,10 @@ class Game:
             if self.weapon.__class__ == Pickaxe:
                 if option == 1:
                     self.pickable_sprites.append(
-                        PickableWeaponSprite(PickableWeapons(Position(x, y), Pistol(self.player))))
+                        PickableWeaponSprite(PickableWeapons(Position(x, y), Blowtorch(self.player))))
                 if option == 2:
                     self.pickable_sprites.append(
-                        PickableWeaponSprite(PickableWeapons(Position(x, y), Pickaxe(self.player))))
+                        PickableWeaponSprite(PickableWeapons(Position(x, y), Chakra(self.player))))
             if self.weapon.__class__ == Rifle:
                 if option == 1:
                     self.pickable_sprites.append(
@@ -232,7 +238,6 @@ class Game:
             self.active_abilities_gui[i].draw(self.active_abilities[i].percent_of_cooldown())
 
     def draw_abilities(self):
-
         self.ability_sprites_and_duration = [ability_and_duration for ability_and_duration in self.ability_sprites_and_duration if ability_and_duration[1]>0]
         
         for i, (sprite, duration) in enumerate(self.ability_sprites_and_duration):
@@ -266,3 +271,10 @@ class Game:
         if self.player.statistics.hp <= 0:
             GameOver().draw(self.screen)
             self.running = False
+
+    def check_gamemode_change(self):
+        if self.player.statistics.hp <= 0: return GameMode.PIT
+        return None
+
+    def click_buttons(self,click_pos):
+        pass
