@@ -1,9 +1,10 @@
 from game_mechanics.Attack import Attack
 from game_mechanics.Position import Position
 from utils.ImageLoader import ImageLoader
+from gui.Sprite import Sprite
 import pygame
 
-class AttackSprite:
+class AttackSprite(Sprite):
     """
     Pygame presenter for Attack class
     """

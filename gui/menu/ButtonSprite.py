@@ -1,7 +1,8 @@
 import pygame
 from game_mechanics.Position import Position
+from gui.Sprite import Sprite
 
-class ButtonSprite:
+class ButtonSprite(Sprite):
     def __init__(self,pos,text,button_width = 370, button_height = 80):
         self.colors = [(139, 69, 19), (205, 133, 63), (255, 215, 0), (169, 169, 169)]
         self.font = pygame.font.Font(None, 64)
