@@ -188,7 +188,7 @@ class Game:
 
         for i,pickable in enumerate(self.pickable_sprites):
             if self.compare_hitbox(pickable.hitbox,self.player_sprite.hitbox):
-                pickable.item.onPick(self.inventory)
+                pickable.item.onPick(self)
                 self.pickable_sprites[i] = None
 
         to_del = []
@@ -226,11 +226,15 @@ class Game:
         if self.player.level == 5 and self.player.last_level_reward == 4:
             if option == 1:
                 # self.weapon = Rifle(self.player)
-                self.pickable_sprites.append(PickableWeaponSprite(PickableWeapons(Position(x,y),self.inventory.rifle_upgrade(Rifle(self.player)))))
+                rifle = Rifle(self.player)
+                self.inventory.rifle_upgrade(rifle)
+                self.pickable_sprites.append(PickableWeaponSprite(PickableWeapons(Position(x,y),rifle)))
             if option == 2:
                 # self.weapon = Pickaxe(self.player)
+                pickaxe = Pickaxe(self.player)
+                self.inventory.pickaxe_upgrade(pickaxe)
                 self.pickable_sprites.append(
-                    PickableWeaponSprite(PickableWeapons(Position(x, y), self.inventory.pickaxe_upgrade(Pickaxe(self.player)))))
+                    PickableWeaponSprite(PickableWeapons(Position(x, y),pickaxe)))
             self.player.last_level_reward += 1
         if self.player.level == 10 and self.player.last_level_reward == 9:
             if self.weapon.__class__ == Pickaxe:
