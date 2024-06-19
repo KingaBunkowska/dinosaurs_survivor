@@ -72,9 +72,17 @@ class Game:
         [self._add_dinosaur(Dinosaur(DinosaurType.SILESAURUS, False, position=PositionGenerator.generate_near_border_position())) for _ in range(2)]
         self.spawn_dinosaur()
 
+
+    @property
+    def friendly_dinosaurs(self):
+        return [dinosaur_sprite for dinosaur_sprite in self.dinosaur_sprites if dinosaur_sprite.dinosaur.ally]
+        
+
+
     def run_tick(self):
         # self.check_game_over()
         if self.running:
+            print(self.weapon)
             self.ticks_from_start += 1
             self.ticks_from_spawn += 1
             self.player._use_up_invincibility()
@@ -97,7 +105,7 @@ class Game:
             for i,dino in enumerate(self.dinosaur_sprites):
                 dino.entity.move(self.player.position, [dino_sprite.dinosaur for dino_sprite in enemy_dinosaurs_sprites])
                 if dino.entity.statistics.hp <= 0:
-                    self.pickable_sprites.append(dino.entity.DropItems())
+                    self.pickable_sprites.append(dino.entity.drop_items(self))
                     self.dinosaur_sprites[i] = None
                     if self.player.get_experience(dino.entity.give_exp()):
                         self.make_option()
@@ -188,7 +196,7 @@ class Game:
 
         for i,pickable in enumerate(self.pickable_sprites):
             if self.compare_hitbox(pickable.hitbox,self.player_sprite.hitbox):
-                pickable.item.onPick(self.inventory)
+                pickable.item.on_pick(self)
                 self.pickable_sprites[i] = None
 
         to_del = []
@@ -349,3 +357,7 @@ class Game:
 
     def click_buttons(self,click_pos):
         pass
+
+    def spawn_random_dinosaur_at_location(self, position, friendly = False):
+        available_types = [d for d in DinosaurType if d != DinosaurType.POLONOSUCHUS]
+        self._add_dinosaur(Dinosaur(type=random.choice(available_types), position=position, friendly=friendly))

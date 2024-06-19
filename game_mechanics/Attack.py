@@ -36,7 +36,7 @@ class Attack:
         self.attacked = set()
         self.target = target
 
-
+    #TODO: change name damage
     def calculate_dammage(self,target):
         """
         Calculate damage given with attack (impact of target statistics not taken into account)

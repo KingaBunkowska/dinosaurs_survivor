@@ -79,9 +79,8 @@ if __name__ == "__main__":
     FPS = 60
     clock = pygame.time.Clock()
     pygame.init()
-    imageL = ImageLoader()
+    ImageLoader()
     inventory = Inventory()
-    image_l = ImageLoader()
     
 
     # screen_width, screen_height = pygame.display.Info().current_w, pygame.display.Info().current_h

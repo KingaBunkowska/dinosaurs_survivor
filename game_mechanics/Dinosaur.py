@@ -1,9 +1,12 @@
+from game_mechanics.Egg import Egg
 from game_mechanics.Entity import Entity
 from game_mechanics.DinosaurType import DinosaurType
 from game_mechanics.Position import Position
 from gui.CoinSprite import CoinSprite
 from game_mechanics.Coin import Coin
 import random
+
+from gui.EggSprite import EggSprite
 
 
 class Dinosaur(Entity):
@@ -23,9 +26,13 @@ class Dinosaur(Entity):
 
         super().move(move_vector)
         
-    def DropItems(self):
+    def drop_items(self, game):
         value = random.randint(1,10)
-        return CoinSprite(Coin(self.position,value))
+
+        if random.randint(1, 10) < 7 or len(game.friendly_dinosaurs)>2:
+            return CoinSprite(Coin(self.position,value))
+        else:
+            return EggSprite(Egg(self.position))
     
     def give_exp(self):
         return self.type.value["exp"]

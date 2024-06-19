@@ -28,7 +28,7 @@ class ImageLoader():
         try:
             with open(os.path.join(path, "player","image_size.json"),"r") as json_player:
                 sizes["player"] = json.load(json_player)
-            images["player"] = pygame.transform.scale(pygame.image.load(os.path.join(path, "player","miner.png")),[sizes["player"]["image_height"],sizes["player"]["image_width"]])
+                images["player"] = pygame.transform.scale(pygame.image.load(os.path.join(path, "player","miner.png")),[sizes["player"]["image_height"],sizes["player"]["image_width"]])
 
             dinosaurs_path = os.path.join(path, "dinosaurs")
             for entity_type in os.listdir(dinosaurs_path):
@@ -49,18 +49,40 @@ class ImageLoader():
                             raise ImagesNotFoundException("Cannot find images for"+ alignment +"of" + entity_type)
                         images[(entity_type, alignment)] = dict_list
 
-            pickable_path = os.path.join(path,"pickable")
+            pickable_path = os.path.join(path, "pickable")
             for item in os.listdir(pickable_path):
-                directory_path = os.path.join(pickable_path, item,"images")
-                json_path = os.path.join(pickable_path, item, "image_size.json")
-                if os.path.isdir(directory_path) and os.path.exists(json_path):
+                if item != "coin" and item!="weapon":
+                    dict_list = []
+                    directory_path = os.path.join(pickable_path, item,"images")
+                    json_path = os.path.join(pickable_path, item, "image_size.json")
+                    if os.path.isdir(directory_path) and os.path.exists(json_path):
+                        
+                        with open(json_path, "r") as json_path:
+                            size = json.load(json_path)
 
-                    with open(json_path, "r") as json_path:
-                        size = json.load(json_path)
+                        for file_name in os.listdir(directory_path):
+                            
+                            if __is_png_file(os.path.join(directory_path, file_name)):
+                                image = pygame.transform.scale(pygame.image.load(os.path.join(directory_path, file_name)),[size["image_height"],size["image_width"]])
+                                dict_list.append(image)
 
-                    for file_name in os.listdir(directory_path):
-                        if __is_png_file(os.path.join(directory_path, file_name)):
-                            images[file_name[:-4]] = pygame.transform.scale(pygame.image.load(os.path.join(directory_path, file_name)),[size["image_height"],size["image_width"]])
+
+                    images[item] = dict_list
+                else:
+                    directory_path = os.path.join(pickable_path, item,"images")
+                    json_path = os.path.join(pickable_path, item, "image_size.json")
+                    if os.path.isdir(directory_path) and os.path.exists(json_path):
+                        
+                        with open(json_path, "r") as json_path:
+                            size = json.load(json_path)
+
+                        for file_name in os.listdir(directory_path):
+                            
+                            if __is_png_file(os.path.join(directory_path, file_name)):
+                                image = pygame.transform.scale(pygame.image.load(os.path.join(directory_path, file_name)),[size["image_height"],size["image_width"]])
+                                images[file_name[:-4]] = image
+
+
 
             projectile_path = os.path.join(path, "projectile")
             for item in os.listdir(projectile_path):
@@ -116,8 +138,10 @@ class ImageLoader():
 
     @staticmethod
     def get_pickable_sprite(item_name):
-        if (item_name) in images.keys():
-            return images.get(item_name)
+        if item_name[-3:]=="egg" and (item_name) in images.keys():
+            return random.choice(images.get(item_name.lower()))
+        elif (item_name) in images.keys():
+            return images[item_name]
 
         raise ImagesNotFoundException("Image for", item_name, "was not found")
 
@@ -130,7 +154,11 @@ class ImageLoader():
 
     @staticmethod
     def get_player_sprite():
-        return images["player"]
+
+        if "player" in images.keys():
+            return images["player"]
+        
+        raise ImagesNotFoundException("Image for player was not found")
 
     @staticmethod
     def get_player_hitbox():

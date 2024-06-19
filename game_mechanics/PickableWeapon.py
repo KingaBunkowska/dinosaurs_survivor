@@ -6,5 +6,7 @@ class PickableWeapons(PickableItems):
         super().__init__(position)
         self.weapon = weapon
 
-    def onPick(self, game):
+    def on_pick(self, game):
+        print("wywolane")
+        print(self.weapon, "to jest self.weapon")
         game.weapon = self.weapon
