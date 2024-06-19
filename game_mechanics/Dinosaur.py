@@ -29,7 +29,7 @@ class Dinosaur(Entity):
     def drop_items(self, game):
         value = random.randint(1,10)
 
-        if random.randint(1, 10) < 7 or len(game.friendly_dinosaurs)>2:
+        if random.randint(1, 10) < 9 or len(game.friendly_dinosaurs)>2:
             return CoinSprite(Coin(self.position,value))
         else:
             return EggSprite(Egg(self.position))

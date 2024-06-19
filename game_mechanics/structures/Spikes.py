@@ -6,8 +6,8 @@ class Spikes(Structure):
     damage = 5
     trigger_distance = 100
 
-    def __init__(self, position):
-        super().__init__(position)
+    def __init__(self, position, game):
+        super().__init__(position, game)
 
     def trigger(self, entity):
         if self.exist and isinstance(entity, Dinosaur) and entity.ally==0 and self.position.distance(entity.position) < self.trigger_distance:

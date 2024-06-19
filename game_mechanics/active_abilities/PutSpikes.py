@@ -11,5 +11,5 @@ class PutSpikes(ActiveAbility):
         super().__init__(cooldown, usage, target)
 
     def use(self):
-        self.game.add_structure(Spikes(self.target.position))
+        self.game.add_structure(Spikes(self.target.position, self.game))
         self.consume()

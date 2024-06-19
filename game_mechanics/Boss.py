@@ -10,7 +10,7 @@ from game_mechanics.active_abilities.SpawnDinos import SpawnDinos
 class Boss(Dinosaur):
     def __init__(self, game, type=DinosaurType.POLONOSUCHUS):
         initial_position = Position(0, 800)
-        statistics = type.value["statistics"].changed_by(hp=20, contact_damage=5)
+        statistics = type.value["statistics"].changed_by(hp=200, contact_damage=10)
         super().__init__(type=type, friendly=False ,position=initial_position)
         self.statistics = statistics
         self.abilities = [SpawnDinos(self, game)]

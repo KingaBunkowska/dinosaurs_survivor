@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 class Structure(ABC):
-    def __init__(self, position):
+    def __init__(self, position, game):
         self.position = position.copy()
         self.exist = 1
 

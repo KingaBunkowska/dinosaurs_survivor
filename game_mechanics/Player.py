@@ -12,7 +12,7 @@ class Player(Entity):
         self.experience = 0
         self.level = 1
         self.last_level_reward = 1
-        self.level_function = lambda x: x**(7/6)
+        self.level_function = lambda x: x**(3/2)
 
     def _receive_damage(self, damage, invincibility):
         if self.invincibility == 0:

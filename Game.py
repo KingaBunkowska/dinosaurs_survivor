@@ -8,6 +8,7 @@ from game_mechanics.active_abilities.Fire import Fire
 from game_mechanics.active_abilities.Heal import Heal
 from game_mechanics.active_abilities.PutSpikes import PutSpikes
 from game_mechanics.active_abilities.SlowDownTime import SlowDownTime
+from game_mechanics.structures.Bush import Bush
 from gui.StructureSprite import StructureSprite
 from gui.BossSprite import BossSprite
 from gui.GameOver import GameOver
@@ -81,10 +82,8 @@ class Game:
 
     @property
     def friendly_dinosaurs(self):
-        return [dinosaur_sprite for dinosaur_sprite in self.dinosaur_sprites if dinosaur_sprite.dinosaur.ally]
-        
-
-
+        return [dinosaur_sprite for dinosaur_sprite in self.dinosaur_sprites if dinosaur_sprite is not None and dinosaur_sprite.dinosaur.ally]
+    
     def run_tick(self):
         if self.running:
             self.ticks_from_start += 1
@@ -100,12 +99,16 @@ class Game:
             for dinosaur_sprite in self.dinosaur_sprites:
                 dinosaur_sprite.dinosaur._use_up_invincibility()
 
-            if random.randint(300, 600) < self.ticks_from_spawn or len(self.friendly_dinosaurs) == len(self.dinosaur_sprites):
-                self.spawn_dinosaur()
-                self.ticks_from_spawn = 0
+
 
             enemy_dinosaurs_sprites = [dinosaur_sprite for dinosaur_sprite in self.dinosaur_sprites if
                                        not dinosaur_sprite.dinosaur.ally]
+            
+            if random.randint(300, 600) < self.ticks_from_spawn or len(enemy_dinosaurs_sprites) == 0:
+                self.spawn_dinosaur()
+                if len(self.structures_sprites)<10:
+                    self.spawn_bushes()
+                self.ticks_from_spawn = 0
 
             for i, dino in enumerate(self.dinosaur_sprites):
                 dino.entity.move(self.player.position,
@@ -337,9 +340,9 @@ class Game:
     def add_structure(self, structure):
         if structure is None or structure.name is None:
             raise ValueError("Structure do not exist or do not have name value")
+        
+        self.structures_sprites.append(StructureSprite(structure))
 
-        if structure.name == "spikes":
-            self.structures_sprites.append(StructureSprite(structure))
 
     def trigger_structures(self):
         for structure_sprite in self.structures_sprites:
@@ -373,3 +376,7 @@ class Game:
     def spawn_random_dinosaur_at_location(self, position, friendly = False):
         available_types = [d for d in DinosaurType if d != DinosaurType.POLONOSUCHUS]
         self._add_dinosaur(Dinosaur(type=random.choice(available_types), position=position, friendly=friendly))
+
+    def spawn_bushes(self):
+        for i in range(random.randint(0,2)):
+            self.add_structure(Bush(position=PositionGenerator.generate_position(), is_health_bush=random.randint(0, 1), game=self))
