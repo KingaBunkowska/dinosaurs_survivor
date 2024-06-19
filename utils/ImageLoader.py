@@ -96,7 +96,20 @@ class ImageLoader():
                     for file_name in os.listdir(directory_path):
                         if __is_png_file(os.path.join(directory_path, file_name)):
                             images[file_name[:-4]] = pygame.transform.scale(pygame.image.load(os.path.join(directory_path, file_name)),[size["image_height"],size["image_width"]])
-                
+
+            backgrounds_path = os.path.join(path, r"backgrounds")
+            for file_name in os.listdir(backgrounds_path):
+                if __is_png_file(os.path.join(backgrounds_path, file_name)):
+                    images[file_name[:-4]] = pygame.transform.scale(
+                        pygame.image.load(os.path.join(backgrounds_path, file_name)),
+                        (1360,740))
+
+            keeper = os.path.join(path, r"shopkeeper","keeper.png")
+            images["keeper"] = pygame.transform.scale(
+                pygame.image.load(keeper),
+                (150, 150))
+
+
 
         except OSError as e:
             print("Error:", e)
@@ -161,8 +174,20 @@ class ImageLoader():
         raise ImagesNotFoundException("Image for player was not found")
 
     @staticmethod
-    def get_player_hitbox():
-        return [sizes["player"]["hitbox_start_x"],sizes["player"]["hitbox_start_y"],sizes["player"]["hitbox_width"],sizes["player"]["hitbox_height"]]
+    def get_player_hitbox_start():
+        return sizes["player"]["hitbox_start_x"],sizes["player"]["hitbox_start_y"]
+
+    @staticmethod
+    def get_player_hitbox_size():
+        return sizes["player"]["hitbox_width"],sizes["player"]["hitbox_height"]
+
+    @staticmethod
+    def get_backgrounds():
+        return (images["bg-1"],images["bg-2"], images["bg-3"])
+
+    @staticmethod
+    def get_keeper():
+        return images["keeper"]
 
 class ImagesNotFoundException(Exception):
     pass

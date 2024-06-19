@@ -48,7 +48,7 @@ class Attack:
         if target in self.attacked:
             return 0
         self.attacked.add(target)
-        return 1.
+        return 3.
 
     def calculate_angle(self,target):
         """
