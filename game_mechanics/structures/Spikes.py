@@ -14,5 +14,5 @@ class Spikes(Structure):
             self.on_trigger(entity)
 
     def on_trigger(self, trigering_entity):
-        trigering_entity._receive_damage(self.damage, None) # Enemies would not be invincible for spikes
+        trigering_entity.receive_damage(self.damage, None) # Enemies would not be invincible for spikes
         self.exist = 0

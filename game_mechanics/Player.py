@@ -14,7 +14,7 @@ class Player(Entity):
         self.last_level_reward = 1
         self.level_function = lambda x: x**(3/2)
 
-    def _receive_damage(self, damage, invincibility):
+    def receive_damage(self, damage, invincibility):
         if self.invincibility == 0:
             self.statistics.hp -= damage
             self.invincibility = invincibility
