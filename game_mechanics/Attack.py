@@ -8,7 +8,7 @@ class Attack:
     superclass for any form of attack
     """
 
-    def __init__(self, target, caster,speed = 8,range = float('inf'), penetrate=True, accuracy = 0):
+    def __init__(self, target, caster, speed = 8,range = float('inf'), penetrate=True, accuracy = 0):
         """
         :param target: coordinates of target
         :type target: Position

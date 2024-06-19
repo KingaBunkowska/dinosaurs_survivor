@@ -86,9 +86,7 @@ class Game:
 
 
     def run_tick(self):
-        # self.check_game_over()
         if self.running:
-            print(self.weapon)
             self.ticks_from_start += 1
             self.ticks_from_spawn += 1
             self.option_cooldown_frames += 1
@@ -102,7 +100,7 @@ class Game:
             for dinosaur_sprite in self.dinosaur_sprites:
                 dinosaur_sprite.dinosaur._use_up_invincibility()
 
-            if random.randint(300, 600) < self.ticks_from_spawn:
+            if random.randint(300, 600) < self.ticks_from_spawn or len(self.friendly_dinosaurs) == len(self.dinosaur_sprites):
                 self.spawn_dinosaur()
                 self.ticks_from_spawn = 0
 
@@ -191,7 +189,7 @@ class Game:
 
         for i,pickable in enumerate(self.pickable_sprites):
             if pickable.hitbox.colide(self.player_sprite.hitbox):
-                pickable.item.on_pick(self.inventory)
+                pickable.item.on_pick(self)
                 self.pickable_sprites[i] = None
 
         to_del = []
@@ -361,8 +359,9 @@ class Game:
 
     def spawn_dinosaur(self):
         available_types = [d for d in DinosaurType if d != DinosaurType.POLONOSUCHUS]
-        self._add_dinosaur(
-            Dinosaur(type=random.choice(available_types), position=PositionGenerator.generate_near_border_position()))
+        for i in range(random.randint(1, 3)):
+            self._add_dinosaur(
+                Dinosaur(type=random.choice(available_types), position=PositionGenerator.generate_near_border_position()))
 
     def check_gamemode_change(self):
         if self.player.statistics.hp <= 0: return GameMode.PIT
