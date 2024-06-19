@@ -89,7 +89,7 @@ class Game:
     def run_tick(self):
         # self.check_game_over()
         if self.running:
-            print(self.weapon)
+            # print(self.weapon)
             self.ticks_from_start += 1
             self.ticks_from_spawn += 1
             self.option_cooldown_frames += 1
@@ -154,7 +154,7 @@ class Game:
                     projectile.attack.fly()
 
             # remove projectiles that disappeared
-            self.projectiles_sprites = [p for p in self.enemy_projectiles_sprites if p is not None]
+            self.enemy_projectiles_sprites = [p for p in self.enemy_projectiles_sprites if p is not None]
 
             for sprite in self.projectiles_sprites:
                 sprite.draw(self.screen)
@@ -213,9 +213,12 @@ class Game:
                     break
         self.projectiles_sprites = [p for i, p in enumerate(self.projectiles_sprites) if i not in to_del]
 
+        to_del = []
         for i, projectiles_sprite in enumerate(self.enemy_projectiles_sprites):
             if projectiles_sprite.hitbox.colide(self.player_sprite.hitbox):
                 self.player.receive_damage(projectiles_sprite.attack.calculate_dammage(self.player))
+                to_del.append(i)
+        self.enemy_projectiles_sprites = [p for i,p in enumerate(self.enemy_projectiles_sprites) if i not in to_del]
 
     def _add_dinosaur(self, dinosaur: Dinosaur) -> None:
         self.dinosaur_sprites.append(DinosaurSprite(dinosaur, self.player))
