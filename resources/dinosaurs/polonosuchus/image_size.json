@@ -1,8 +1,8 @@
 {
     "image_width": 128,
     "image_height": 128,
-    "hitbox_width": 128,
-    "hitbox_height": 80,
-    "hitbox_start_x": 64,
-    "hitbox_start_y": 24
+    "hitbox_width": 256,
+    "hitbox_height": 128,
+    "hitbox_start_x": 0,
+    "hitbox_start_y": 128
 }

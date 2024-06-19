@@ -37,8 +37,9 @@ def handle_events():
             game._add_dinosaur(Dinosaur(type=random.choice(available_types), position=Position(*event.pos)))
         elif dev_mode == 1 and event.type == pygame.KEYUP and event.key == pygame.K_t:
             game._add_dinosaur(Dinosaur(type=random.choice(available_types), position=Position(*pygame.mouse.get_pos()), friendly=True))
-        elif dev_mode == 1 and event.type == pygame.KEYUP and event.key == pygame.K_h:
-            game.player.increase_max_health(10)
+        elif dev_mode == 1 and event.type == pygame.KEYUP and event.key == pygame.K_b:
+            game.spawn_boss()
+        
 
         if dev_mode != 1 and event.type == pygame.MOUSEBUTTONDOWN:
             game.click_buttons(event.pos)

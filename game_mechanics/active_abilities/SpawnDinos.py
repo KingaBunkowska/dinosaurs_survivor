@@ -8,7 +8,7 @@ class SpawnDinos(ActiveAbility):
     def __init__(self, target, game):
         self.name = "spawn"
         self.game = game
-        cooldown = 1000
+        cooldown = 400
         usage = 5
 
         super().__init__(cooldown, usage, target)

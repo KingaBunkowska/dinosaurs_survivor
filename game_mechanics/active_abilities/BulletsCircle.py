@@ -10,21 +10,21 @@ class BulletsCircle(ActiveAbility):
         self.game = game
         self.angles =[0,30,60,90,120,150,180,210,240,270,300,330]
 
-        cooldown = 2000
-        usage = 1
+        cooldown = 200
+        usage = None
 
         super().__init__(cooldown, usage, target)
 
-        def use(self):
-            if self.can_use():
-                for alpha in self.angles:
-                    attack = Attack(Position(0,0),None)
-                    attack.angle = alpha
-                    vector_x = 1
-                    vector_y = vector_x * tan(radians(alpha))
-                    vector = Position(vector_x,vector_y)
-                    vector.normalized()
-                    attack.direction = vector
-                    game.enemy_projectiles_sprites.append(AttackSprite(attack))
+    def use(self):
+        if self.can_use():
+            for alpha in self.angles:
+                attack = Attack(Position(0,0), self.target)
+                attack.angle = alpha
+                vector_x = 1
+                vector_y = vector_x * tan(radians(alpha))
+                vector = Position(vector_x,vector_y)
+                vector.normalized()
+                attack.direction = vector
+                self.game.enemy_projectiles_sprites.append(AttackSprite(attack))
 
-                self.consume()
+            self.consume()

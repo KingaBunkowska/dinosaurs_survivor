@@ -104,6 +104,7 @@ class Game:
 
             enemy_dinosaurs_sprites = [dinosaur_sprite for dinosaur_sprite in self.dinosaur_sprites if
                                        not dinosaur_sprite.dinosaur.ally]
+            enemy_dinosaurs = [dinosaur_sprite.dinosaur for dinosaur_sprite in enemy_dinosaurs_sprites]
             
             if random.randint(300, 600) < self.ticks_from_spawn or len(enemy_dinosaurs_sprites) == 0:
                 self.spawn_dinosaur()
@@ -113,7 +114,7 @@ class Game:
 
             for i, dino in enumerate(self.dinosaur_sprites):
                 dino.entity.move(self.player.position,
-                                 [dino_sprite.dinosaur for dino_sprite in enemy_dinosaurs_sprites])
+                                 enemy_dinosaurs)
                 if dino.entity.statistics.hp <= 0:
                     self.pickable_sprites.append(dino.entity.drop_items(self))
                     self.dinosaur_sprites[i] = None
@@ -217,7 +218,7 @@ class Game:
         to_del = []
         for i, projectiles_sprite in enumerate(self.enemy_projectiles_sprites):
             if projectiles_sprite.hitbox.colide(self.player_sprite.hitbox):
-                self.player.receive_damage(projectiles_sprite.attack.calculate_dammage(self.player))
+                self.player.receive_damage(projectiles_sprite.attack.calculate_dammage(self.player), self.invincibility_frames)
                 to_del.append(i)
         self.enemy_projectiles_sprites = [p for i,p in enumerate(self.enemy_projectiles_sprites) if i not in to_del]
 
