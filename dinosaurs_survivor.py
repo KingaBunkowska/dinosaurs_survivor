@@ -85,6 +85,7 @@ if __name__ == "__main__":
 
     # screen_width, screen_height = pygame.display.Info().current_w, pygame.display.Info().current_h
     screen_width, screen_height = 1360, 748
+    # screen_width, screen_height = 1000, 550
     pos_gen = PositionGenerator(screen_width, screen_height)
     dark_overlay = pygame.Surface((screen_width, screen_height))
     dark_overlay.fill((0, 0, 0))
@@ -96,6 +97,8 @@ if __name__ == "__main__":
     # game = Game(screen)
     game = Menu(screen)
     running = True
+
+    backgrounds = ImageLoader.get_backgrounds()
 
     screen_color = [(25,25,25),(70,70,70),(0, 153, 51)]
 
@@ -124,7 +127,9 @@ if __name__ == "__main__":
                 dark_overlay_alpha = 0
             dark_overlay.set_alpha(dark_overlay_alpha)
 
-        screen.fill(screen_color[game_mode.value])
+        # screen.fill(screen_color[game_mode.value])
+        screen.blit(backgrounds[game_mode.value],(0,0))
+
         game.run_tick()
         next_game_mode = game.check_gamemode_change()
         if next_game_mode != None:
