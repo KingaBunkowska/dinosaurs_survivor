@@ -259,7 +259,10 @@ class Game:
             self.player.last_level_reward += 1
 
         if self.player.level != 5 and self.player.level != 10 and self.player.last_level_reward < self.player.level:
-            self.player.stat_up(5, option)
+            if option==1:
+                self.player.increase_max_health(5)
+            else:
+                self.player.stat_up(5, option)
             self.player.last_level_reward += 1
         self.option = None
 
@@ -313,6 +316,7 @@ class Game:
 
     def click_buttons(self,click_pos):
         pass
+
     def add_structure(self, structure):
         if structure is None or structure.name is None:
             raise ValueError("Structure do not exist or do not have name value")
