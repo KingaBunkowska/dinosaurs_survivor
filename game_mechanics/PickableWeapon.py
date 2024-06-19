@@ -7,6 +7,6 @@ class PickableWeapons(PickableItems):
         self.weapon = weapon
 
     def on_pick(self, game):
-        print("wywolane")
-        print(self.weapon, "to jest self.weapon")
+        # print("wywolane")
+        # print(self.weapon, "to jest self.weapon")
         game.weapon = self.weapon

@@ -31,10 +31,7 @@ class Pit:
         return None
 
     def click_buttons(self, click_pos):
-        if not (self.player_sprite.hitbox[0].x > self.keeper_sprite.hitbox[1].x or self.keeper_sprite.hitbox[0].x >
-                self.player_sprite.hitbox[1].x or
-                self.player_sprite.hitbox[0].y > self.keeper_sprite.hitbox[1].y or self.keeper_sprite.hitbox[0].y >
-                self.player_sprite.hitbox[1].y):
+        if self.player_sprite.hitbox.colide(self.keeper_sprite.hitbox):
             for i, offer in enumerate(self.shop_interface.offers):
                 if offer.button_rect.collidepoint(click_pos):
                     self.shop_interface.apply_choice(i)

@@ -33,7 +33,7 @@ class Entity:
         else:
             self.facing_right = self.original_facing_right
 
-    def _receive_damage(self, damage, dealer=None):
+    def receive_damage(self, damage, dealer=None):
         if ((dealer != None and dealer in self.invincibility.keys() and self.invincibility[dealer] < 1) 
             or dealer == None
             or (dealer != None and dealer not in self.invincibility.keys())):

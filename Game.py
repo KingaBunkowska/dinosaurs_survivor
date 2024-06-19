@@ -44,6 +44,7 @@ class Game:
         self.dinosaur_sprites = []
         self.screen = screen
         self.projectiles_sprites = []
+        self.enemy_projectiles_sprites = []
         self.player_sprite = PlayerSprite(self.player)
         self.pickable_sprites = []
         self.invincibility_frames = 100
@@ -146,6 +147,15 @@ class Game:
             # remove projectiles that disappeared
             self.projectiles_sprites = [p for p in self.projectiles_sprites if p is not None]
 
+            for i, projectile in enumerate(self.enemy_projectiles_sprites):
+                if projectile.attack.range <= 0:
+                    self.projectiles_sprites[i] = None
+                else:
+                    projectile.attack.fly()
+
+            # remove projectiles that disappeared
+            self.projectiles_sprites = [p for p in self.enemy_projectiles_sprites if p is not None]
+
             for sprite in self.projectiles_sprites:
                 sprite.draw(self.screen)
 
@@ -172,8 +182,8 @@ class Game:
         for dinosaur in enemy_sprites:
             if dinosaur.dinosaur.ally == False:
                 if dinosaur.hitbox.colide(self.player_sprite.hitbox):
-                    self.player._receive_damage(dinosaur.entity.statistics.contact_damage, self.invincibility_frames)
-                    dinosaur.entity._receive_damage(self.player.statistics.contact_damage, self.player)
+                    self.player.receive_damage(dinosaur.entity.statistics.contact_damage, self.invincibility_frames)
+                    dinosaur.entity.receive_damage(self.player.statistics.contact_damage, self.player)
                     break
 
         self.time_of_contact_damage += 1
@@ -186,22 +196,26 @@ class Game:
             for enemy_sprite in enemy_sprites:
                 if ally_sprite.hitbox.colide(enemy_sprite.hitbox) and dinosaurs_hitted < 3:
                     dinosaurs_hitted += 1
-                    enemy_sprite.dinosaur._receive_damage(ally_sprite.dinosaur.statistics.contact_damage,
-                                                          ally_sprite.dinosaur)
+                    enemy_sprite.dinosaur.receive_damage(ally_sprite.dinosaur.statistics.contact_damage,
+                                                         ally_sprite.dinosaur)
 
         for i,pickable in enumerate(self.pickable_sprites):
             if pickable.hitbox.colide(self.player_sprite.hitbox):
-                pickable.item.on_pick(self.inventory)
+                pickable.item.on_pick(self)
                 self.pickable_sprites[i] = None
 
         to_del = []
-        for i, projectiles_presenter in enumerate(self.projectiles_sprites):
+        for i, projectiles_sprite in enumerate(self.projectiles_sprites):
             for dinosaur in enemy_sprites:
-                if projectiles_presenter.hitbox.colide(dinosaur.hitbox):
-                    dinosaur.entity._receive_damage(projectiles_presenter.attack.calculate_dammage(dinosaur.entity))
-                    if not projectiles_presenter.attack.penetrate: to_del.append(i)
+                if projectiles_sprite.hitbox.colide(dinosaur.hitbox):
+                    dinosaur.entity.receive_damage(projectiles_sprite.attack.calculate_dammage(dinosaur.entity))
+                    if not projectiles_sprite.attack.penetrate: to_del.append(i)
                     break
         self.projectiles_sprites = [p for i, p in enumerate(self.projectiles_sprites) if i not in to_del]
+
+        for i, projectiles_sprite in enumerate(self.enemy_projectiles_sprites):
+            if projectiles_sprite.hitbox.colide(self.player_sprite.hitbox):
+                self.player.receive_damage(projectiles_sprite.attack.calculate_dammage(self.player))
 
     def _add_dinosaur(self, dinosaur: Dinosaur) -> None:
         self.dinosaur_sprites.append(DinosaurSprite(dinosaur, self.player))
