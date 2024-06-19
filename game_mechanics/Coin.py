@@ -5,5 +5,5 @@ class Coin(PickableItems):
         super().__init__(position)
         self.value = value
 
-    def onPick(self,inventory):
-        inventory.money_add(self.value)
+    def onPick(self,game):
+        game.inventory.money_add(self.value)

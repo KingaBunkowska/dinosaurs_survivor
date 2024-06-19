@@ -20,6 +20,7 @@ class AbilitySprite:
         self.player = player
         self.move_with_player = move_with_player
 
+
     def draw(self, screen):
         screen.blit(self.sprite, (self.player.position if self.move_with_player else self.postion_of_cast).to_coords(width=self.width, height=self.height))
 

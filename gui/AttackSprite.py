@@ -1,9 +1,11 @@
 from game_mechanics.Attack import Attack
 from game_mechanics.Position import Position
 from utils.ImageLoader import ImageLoader
+from gui.Sprite import Sprite
+from game_mechanics.Hitbox import Hitbox
 import pygame
 
-class AttackSprite:
+class AttackSprite(Sprite):
     """
     Pygame presenter for Attack class
     """
@@ -28,7 +30,9 @@ class AttackSprite:
         else:
             self.colision_point = Position(-1000,-1000)
             self.colision_counter = 0
-        #self.image = pygame.transform.rotate(self.image, attack.angle)
+
+        self.hitbox = Hitbox(self.attack.position)
+        # self.image = pygame.transform.rotate(self.image, attack.angle)
     def draw(self, screen):
         """
         Draw sprite on screen
@@ -40,11 +44,13 @@ class AttackSprite:
                 self.image = pygame.transform.rotate(self.image,2)
             self.colision_point = Position(self.attack.position.x + self.size / 2,
                                            self.attack.position.y + self.size / 2) + self.attack.direction * (self.size // 2)
-            screen.blit(self.image, (self.attack.position.to_coords()))
+            screen.blit(self.image, (self.hitbox.position - Position(self.size // 2,self.size // 2)).to_coords())
         else:
             self.colision_counter += 1
             if self.colision_counter >= 2:
+                self.hitbox.position = self.attack.target
                 self.colision_point = self.attack.target
             pygame.draw.line(screen, (245, 0, 0), self.attack.caster.position.to_coords(),
                              self.attack.target.to_coords(), 5)
             pygame.draw.circle(screen,(255,255,0),self.colision_point.to_coords(),5,5)
+        pygame.draw.circle(screen, (255, 0, 0), self.hitbox.position.to_coords(), 5, 5)

@@ -1,8 +1,9 @@
 import pygame
 from utils.ImageLoader import ImageLoader
 from game_mechanics.Courences import Courences
+from gui.Sprite import Sprite
 
-class OfferSprite:
+class OfferSprite(Sprite):
     def __init__(self, pos, cost, text, item, type):
         self.price_font = pygame.font.SysFont(None, 30)
         self.info_font = pygame.font.SysFont(None, 18)

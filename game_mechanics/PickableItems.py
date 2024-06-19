@@ -14,5 +14,5 @@ class PickableItems:
         move_vector *= 12
         self.position += move_vector
 
-    def onPick(self,inventory):
+    def onPick(self,game):
         pass

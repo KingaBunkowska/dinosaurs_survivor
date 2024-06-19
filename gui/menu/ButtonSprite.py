@@ -1,19 +1,22 @@
 import pygame
 from game_mechanics.Position import Position
+from gui.Sprite import Sprite
 
-class ButtonSprite:
-    def __init__(self,pos,text,button_width = 370, button_height = 80):
+class ButtonSprite(Sprite):
+    def __init__(self,pos,off_pos,text,button_width = 200, button_height = 50):
         self.colors = [(139, 69, 19), (205, 133, 63), (255, 215, 0), (169, 169, 169)]
         self.font = pygame.font.Font(None, 64)
         self.text = text
 
-        self.button_rect = pygame.Rect((pos.x + button_width//2) // 2 + 50, (pos.y + button_height//2) // 2 + 50,
-                                  button_width, button_height)
+        self.button_rect = pygame.Rect((pos.x + off_pos[0] - button_width // 2),
+                                       (pos.y + off_pos[1] - button_height // 2),
+                                       button_width, button_height)
+
+
 
     def draw(self,screen):
-        pygame.draw.rect(screen, self.colors[3], self.button_rect, border_radius=0)
         if self.button_rect.collidepoint(pygame.mouse.get_pos()):
-            pygame.draw.rect(screen, self.colors[0], self.button_rect, border_radius=20)
+            pygame.draw.rect(screen, self.colors[0],self.button_rect, border_radius=20)
         else:
             pygame.draw.rect(screen, self.colors[1], self.button_rect, border_radius=20)
         # Draw button

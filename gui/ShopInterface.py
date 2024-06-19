@@ -3,9 +3,10 @@ from gui.OfferSprite import OfferSprite
 from game_mechanics.ShopKeeper import ShopKeeper
 from game_mechanics.Courences import Courences
 from utils.ImageLoader import ImageLoader
+from gui.Sprite import Sprite
 import pygame
 
-class ShopInterface:
+class ShopInterface(Sprite):
     def __init__(self,keeper):
         self.offers_pos = [Position(115,120),Position(395, 120), Position(675,120), Position(115, 300), Position(395, 300), Position(675,300), Position(115, 480), Position(395, 480), Position(675,480)]
         self.keeper = keeper
@@ -18,7 +19,7 @@ class ShopInterface:
         overlay = pygame.Surface((int(width * 0.9),int(height * 0.9)))
         overlay.fill((50, 50, 50))
         overlay.set_alpha(200)
-        pygame.draw.rect(screen,(255,0,255),[230,230,150,150])
+        # pygame.draw.rect(screen,(255,0,255),[230,230,150,150])
         screen.blit(overlay, (int(width * 0.05), int(height * 0.05)))
 
         screen.blit(self.courency_image[Courences.GOLD],(int(width * 0.05) + 20,int(height * 0.05) + 20))
