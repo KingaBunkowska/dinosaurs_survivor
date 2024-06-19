@@ -70,7 +70,8 @@ def handle_player_input():
     if game_mode != GameMode.MENU:
         game.player.move(Position(x, y))
 
-    if option != 0 : game.resolve_option(option)
+    if option != 0 :
+        game.resolve_option(option)
 
 
 dev_mode = 0

@@ -1,17 +1,17 @@
 from game_mechanics.Entity import Entity
 from game_mechanics.Statistics import Statistics
+from game_mechanics.Position import Position
 from game_mechanics.Inventory import Inventory
 from game_mechanics.Coin import Coin
 
 
 class Player(Entity):
     def __init__(self):
-        super().__init__(statistics=Statistics(speed=10,hp = 10., contact_damage=0.),facing_right=True)
+        super().__init__(statistics=Statistics(speed=10,hp = 10., contact_damage=0.),position=Position(750,330),facing_right=True)
         self.invincibility = 0
         self.experience = 0
         self.level = 1
         self.last_level_reward = 1
-        self.inventory = Inventory()
         self.level_function = lambda x: x**(7/6)
 
     def _receive_damage(self, damage, invincibility):
@@ -32,7 +32,7 @@ class Player(Entity):
 
     def stat_up(self,value,stat):
         if stat == 1:
-            self.statistics.hp_up(value)
+            self.increase_max_health(value)
         elif stat == 2:
             self.statistics.speed_up(value//2)
         else:

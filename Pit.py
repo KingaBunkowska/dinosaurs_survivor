@@ -10,6 +10,7 @@ from gui.OfferSprite import OfferSprite
 class Pit:
     def __init__(self, screen, inventory):
         self.player = Player()
+        # print(self.player)
         self.inventory = inventory
         self.inventory.new_player(self.player)
         self.player_sprite = PlayerSprite(self.player)

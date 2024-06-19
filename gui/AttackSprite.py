@@ -42,7 +42,6 @@ class AttackSprite(Sprite):
         if self.colision_counter<0:
             if self.rotate:
                 self.image = pygame.transform.rotate(self.image,2)
-            print(self.size)
             self.colision_point = Position(self.attack.position.x + self.size / 2,
                                            self.attack.position.y + self.size / 2) + self.attack.direction * (self.size // 2)
             screen.blit(self.image, (self.hitbox.position - Position(self.size // 2,self.size // 2)).to_coords())
