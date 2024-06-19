@@ -42,4 +42,5 @@ class Player(Entity):
         percent_of_change = (self.statistics.max_hp + value)/self.statistics.max_hp
         self.statistics.max_hp += value
         self.statistics.hp *= percent_of_change 
+        self.statistics.hp = min(self.statistics.max_hp, self.statistics.hp//1)
        
