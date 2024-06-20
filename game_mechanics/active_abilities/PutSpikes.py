@@ -2,8 +2,9 @@ from game_mechanics.active_abilities.ActiveAbility import ActiveAbility
 from game_mechanics.structures.Spikes import Spikes
 
 class PutSpikes(ActiveAbility):
+    name = "spikes"
     def __init__(self, target, game):
-        self.name = "spikes"
+        
         cooldown = 240
         usage = 5
         self.game = game

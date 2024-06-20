@@ -1,11 +1,11 @@
 from game_mechanics.active_abilities.ActiveAbility import ActiveAbility
 
 class Fire(ActiveAbility):
-    def __init__(self, player):
-        self.name = "fire"
+    name = "fire"
+    def __init__(self, player, game):
+        
         cooldown = 360
         usage = None
-
         self.player = player
 
         super().__init__(cooldown, usage, None)

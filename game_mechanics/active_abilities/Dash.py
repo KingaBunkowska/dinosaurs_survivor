@@ -2,8 +2,9 @@ from game_mechanics.active_abilities.ActiveAbility import ActiveAbility
 
 
 class Dash(ActiveAbility):
-    def __init__(self, target):
-        self.name = "dash"
+    name = "dash"
+    def __init__(self, target, game):
+        
         cooldown = 240
         usage = None
 

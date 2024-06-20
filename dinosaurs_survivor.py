@@ -116,7 +116,7 @@ if __name__ == "__main__":
             if game_mode == GameMode.PIT:
                 game = Pit(screen,inventory)
             elif game_mode == GameMode.GAME:
-                game = Game(screen,inventory)
+                game = Game(screen, inventory, game.abilities_chosen)
             elif game_mode == GameMode.MENU:
                 game = Pit(screen,inventory)
 

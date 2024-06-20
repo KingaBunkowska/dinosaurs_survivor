@@ -38,7 +38,7 @@ from utils.PositionGenerator import PositionGenerator
 
 
 class Game:
-    def __init__(self, screen, inventory):
+    def __init__(self, screen, inventory, abilities):
         self.player = Player()
         self.inventory = inventory
         self.inventory.new_player(self.player)
@@ -57,7 +57,11 @@ class Game:
         self.time_of_contact_damage = 10
 
         self.option = []
-        self.active_abilities = [PutSpikes(self.player, self), Dash(self.player)]
+        # self.active_abilities = [PutSpikes(self.player, self), Dash(self.player)]
+
+        self.player_abilities = [Dash, Heal, Fire, PutSpikes, SlowDownTime]
+
+        self.active_abilities = [ability(self.player, self) for i, ability in enumerate(self.player_abilities) if abilities[i]]
         self.active_abilities_gui = [ActivatableRect(800 + 50 * i, 20, screen, self.active_abilities[i])
                                      for i in range(2)]
 

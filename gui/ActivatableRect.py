@@ -1,13 +1,16 @@
 import pygame
 import os
 
+from game_mechanics.Hitbox import Hitbox
+from game_mechanics.Position import Position
+
 images = {
-    "dash": pygame.image.load("resources\icons\dash.png"),
-    "heal": pygame.image.load("resources\icons\heal.png"),
-    "none": pygame.image.load("resources\icons\\none.png"), 
-    "fire": pygame.image.load("resources\icons\\fire.png"),
-    "spikes": pygame.image.load("resources\icons\\spikes.png"),
-    "slow_down_time": pygame.image.load("resources\icons\\slow_down_time.png")
+    "dash": pygame.image.load("resources\\icons\\dash.png"),
+    "heal": pygame.image.load("resources\\icons\\heal.png"),
+    "none": pygame.image.load("resources\\icons\\none.png"), 
+    "fire": pygame.image.load("resources\\icons\\fire.png"),
+    "spikes": pygame.image.load("resources\\icons\\spikes.png"),
+    "slow_down_time": pygame.image.load("resources\\icons\\slow_down_time.png")
 }
 
 class ActivatableRect:
@@ -30,8 +33,9 @@ class ActivatableRect:
         self.width = self.height = 30
 
         self.active_ability = active_ability
+        self.hitbox = Hitbox(position=Position(x, y), size=(self.width, self.height), start=(0, 0))
 
-    def set_image(self, ability = "dash"):
+    def set_image(self, ability):
         self.image = images[ability.name]
 
     def draw(self, activation_percent):
@@ -58,4 +62,3 @@ class ActivatableRect:
             health_text = f"{int(self.active_ability.usages_left)}"
             text_surface = font.render(health_text, True, self.FONT_COLOR)
             self.screen.blit(text_surface, (self.x + 25, self.y + 25))
-
