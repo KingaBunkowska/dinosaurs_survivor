@@ -17,4 +17,4 @@ class PlayerSprite(EntitySprite):
                 screen.blit(rotated_image, self.entity.get_position().to_coords(*self.size))
             else:
                 screen.blit(self.image, self.entity.get_position().to_coords(*self.size))
-        pygame.draw.rect(screen, (255, 0, 0), self.hitbox.to_rect(), 2)
+        # pygame.draw.rect(screen, (255, 0, 0), self.hitbox.to_rect(), 2)
