@@ -21,7 +21,7 @@ class Bush(Structure):
 
     def on_trigger(self, trigering_entity):
         if self.is_health_bush:
-            trigering_entity.statistics.hp = max(trigering_entity.statistics.hp, trigering_entity.statistics.max_hp)
+            trigering_entity.statistics.hp = min(trigering_entity.statistics.hp+5, trigering_entity.statistics.max_hp)
         else:
             abilities_with_usage = [ability for ability in self.game.active_abilities if ability.usages_left != None]
             if len(abilities_with_usage) != 0:
