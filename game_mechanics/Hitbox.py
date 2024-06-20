@@ -8,7 +8,7 @@ class Hitbox:
         self.start_x, self.start_y = start
         self.is_box = False if size[0] == 0 else True
 
-    def colide(self, hitbox):
+    def collide(self, hitbox):
         if self.is_box:
             if hitbox.is_box:
                 return not (self.get_upper_left().x > hitbox.get_lower_right().x or

@@ -34,12 +34,12 @@ class Entity:
             self.facing_right = self.original_facing_right
 
     def receive_damage(self, damage, dealer=None):
-        if ((dealer != None and dealer in self.invincibility.keys() and self.invincibility[dealer] < 1) 
-            or dealer == None
-            or (dealer != None and dealer not in self.invincibility.keys())):
+        if ((dealer is not None and dealer in self.invincibility.keys() and self.invincibility[dealer] < 1)
+            or dealer is None
+                or (dealer is not None and dealer not in self.invincibility.keys())):
 
             self.statistics.hp -= damage
-            if dealer != None:
+            if dealer is not None:
                 self.invincibility[dealer] = self.invincibility_base_time
 
     def get_position(self):
@@ -48,7 +48,7 @@ class Entity:
     def is_dead(self):
         return self.statistics.hp < 0
 
-    def _use_up_invincibility(self):
+    def use_up_invincibility(self):
         to_delete = []
         for dealer in self.invincibility.keys():
             # cleaning directory if dealer did not deal damage for 60000 ticks (100s for 60FPS)

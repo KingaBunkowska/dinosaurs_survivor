@@ -1,4 +1,3 @@
-from game_mechanics.Position import Position
 from gui.EntitySprite import EntitySprite
 from game_mechanics.Dinosaur import Dinosaur
 from game_mechanics.Player import Player

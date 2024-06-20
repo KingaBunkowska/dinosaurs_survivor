@@ -18,11 +18,7 @@ from gui.ActivatableRect import ActivatableRect
 from gui.PlayerSprite import PlayerSprite
 from gui.DinosaurSprite import DinosaurSprite
 from gui.AttackSprite import AttackSprite
-from game_mechanics.Attack import Attack
 from game_mechanics.Position import Position
-from game_mechanics.Weapon import Weapon
-from game_mechanics.Coin import Coin
-from gui.PickableItemSprite import PickableItemSprite
 from gui.LevelUpMenu import LevelUpMenu
 from game_mechanics.Weapons.Pistol import Pistol
 from game_mechanics.Weapons.Pickaxe import Pickaxe
@@ -80,7 +76,7 @@ class Game:
         self.ticks_from_start = 0
         self.ticks_from_spawn = 0
 
-        [self._add_dinosaur(
+        [self.add_dinosaur(
             Dinosaur(DinosaurType.SILESAURUS, False, position=PositionGenerator.generate_near_border_position())) for _
          in range(2)]
         self.spawn_dinosaur()
@@ -95,7 +91,7 @@ class Game:
             self.ticks_from_start += 1
             self.ticks_from_spawn += 1
             self.option_cooldown_frames += 1
-            self.player._use_up_invincibility()
+            self.player.use_up_invincibility()
             self.do_delayed_actions()
             self.draw_abilities()
             self.draw_gui()
@@ -103,7 +99,7 @@ class Game:
             self.check_collisions()
 
             for dinosaur_sprite in self.dinosaur_sprites:
-                dinosaur_sprite.dinosaur._use_up_invincibility()
+                dinosaur_sprite.dinosaur.use_up_invincibility()
 
 
 
@@ -126,7 +122,7 @@ class Game:
                     if self.player.get_experience(dino.entity.give_exp()):
                         self.make_option()
             # remove dinosaurs that disappeared
-            self.dinosaur_sprites = [d for d in self.dinosaur_sprites if d != None]
+            self.dinosaur_sprites = [d for d in self.dinosaur_sprites if d is not None]
 
             self.dinosaur_sprites = [dinosaur_sprite for dinosaur_sprite in self.dinosaur_sprites if
                                      dinosaur_sprite.dinosaur.statistics.hp >= 0]
@@ -138,7 +134,7 @@ class Game:
             for presenter in self.dinosaur_sprites:
                 presenter.draw(self.screen)
 
-            self.pickable_sprites = [c for c in self.pickable_sprites if c != None]
+            self.pickable_sprites = [c for c in self.pickable_sprites if c is not None]
 
             for pickable in self.pickable_sprites:
                 if self.player.position.distance(pickable.item.position) <= self.player.statistics.pickup_range:
@@ -177,11 +173,6 @@ class Game:
             self.clean_structures()
             self.draw_structures()
 
-    def compare_hitbox(self, colision_point, hitbox):
-        if colision_point.following(hitbox[0]) and colision_point.proceeding(hitbox[1]):
-            return True
-        return False
-
     def check_collisions(self):
         """
         Check whether any projectile or Player hit any Dinosaur
@@ -191,8 +182,8 @@ class Game:
         ally_sprites = [dino_sprite for dino_sprite in self.dinosaur_sprites if dino_sprite.dinosaur.ally]
 
         for dinosaur in enemy_sprites:
-            if dinosaur.dinosaur.ally == False:
-                if dinosaur.hitbox.colide(self.player_sprite.hitbox):
+            if not dinosaur.dinosaur.ally:
+                if dinosaur.hitbox.collide(self.player_sprite.hitbox):
                     self.player.receive_damage(dinosaur.entity.statistics.contact_damage, self.invincibility_frames)
                     dinosaur.entity.receive_damage(self.player.statistics.contact_damage, self.player)
                     break
@@ -205,33 +196,33 @@ class Game:
             dinosaurs_hitted = 0
 
             for enemy_sprite in enemy_sprites:
-                if ally_sprite.hitbox.colide(enemy_sprite.hitbox) and dinosaurs_hitted < 3:
+                if ally_sprite.hitbox.collide(enemy_sprite.hitbox) and dinosaurs_hitted < 3:
                     dinosaurs_hitted += 1
                     enemy_sprite.dinosaur.receive_damage(ally_sprite.dinosaur.statistics.contact_damage,
                                                          ally_sprite.dinosaur)
 
         for i,pickable in enumerate(self.pickable_sprites):
-            if pickable.hitbox.colide(self.player_sprite.hitbox):
+            if pickable.hitbox.collide(self.player_sprite.hitbox):
                 pickable.item.on_pick(self)
                 self.pickable_sprites[i] = None
 
         to_del = []
         for i, projectiles_sprite in enumerate(self.projectiles_sprites):
             for dinosaur in enemy_sprites:
-                if projectiles_sprite.hitbox.colide(dinosaur.hitbox):
-                    dinosaur.entity.receive_damage(projectiles_sprite.attack.calculate_dammage(dinosaur.entity))
+                if projectiles_sprite.hitbox.collide(dinosaur.hitbox):
+                    dinosaur.entity.receive_damage(projectiles_sprite.attack.calculate_damage(dinosaur.entity))
                     if not projectiles_sprite.attack.penetrate: to_del.append(i)
                     break
         self.projectiles_sprites = [p for i, p in enumerate(self.projectiles_sprites) if i not in to_del]
 
         to_del = []
         for i, projectiles_sprite in enumerate(self.enemy_projectiles_sprites):
-            if projectiles_sprite.hitbox.colide(self.player_sprite.hitbox):
-                self.player.receive_damage(projectiles_sprite.attack.calculate_dammage(self.player), self.invincibility_frames)
+            if projectiles_sprite.hitbox.collide(self.player_sprite.hitbox):
+                self.player.receive_damage(projectiles_sprite.attack.calculate_damage(self.player), self.invincibility_frames)
                 to_del.append(i)
         self.enemy_projectiles_sprites = [p for i,p in enumerate(self.enemy_projectiles_sprites) if i not in to_del]
 
-    def _add_dinosaur(self, dinosaur: Dinosaur) -> None:
+    def add_dinosaur(self, dinosaur: Dinosaur) -> None:
         self.dinosaur_sprites.append(DinosaurSprite(dinosaur, self.player))
 
     def player_attack(self) -> None:
@@ -390,19 +381,12 @@ class Game:
     def spawn_dinosaur(self):
         available_types = [d for d in DinosaurType if d != DinosaurType.POLONOSUCHUS]
         for i in range(random.randint(1, 3)):
-            self._add_dinosaur(
+            self.add_dinosaur(
                 Dinosaur(type=random.choice(available_types), position=PositionGenerator.generate_near_border_position()))
-
-    def check_gamemode_change(self):
-        if self.player.statistics.hp <= 0: return GameMode.PIT
-        return None
-
-    def click_buttons(self, click_pos):
-        pass
 
     def spawn_random_dinosaur_at_location(self, position, friendly = False):
         available_types = [d for d in DinosaurType if d != DinosaurType.POLONOSUCHUS]
-        self._add_dinosaur(Dinosaur(type=random.choice(available_types), position=position, friendly=friendly))
+        self.add_dinosaur(Dinosaur(type=random.choice(available_types), position=position, friendly=friendly))
 
     def spawn_bushes(self):
         for i in range(random.randint(0,2)):

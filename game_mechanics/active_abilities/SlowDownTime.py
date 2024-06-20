@@ -1,6 +1,5 @@
 from game_mechanics.active_abilities.ActiveAbility import ActiveAbility
 
-
 class SlowDownTime(ActiveAbility):
     name = "slow_down_time"
     def __init__(self, player, game):

@@ -16,7 +16,7 @@ class ActiveAbility(ABC):
             self.active = True
 
     def consume(self):
-        if self.usages_left != None:
+        if self.usages_left is not None:
             self.usages_left -= 1
         
         self.active = False
@@ -26,7 +26,7 @@ class ActiveAbility(ABC):
         return 100 - self.curr_cooldown/self.cooldown * 100
     
     def can_use(self):
-        return self.active and (self.usages_left == None or self.usages_left > 0)
+        return self.active and (self.usages_left is None or self.usages_left > 0)
     
     @abstractmethod
     def use(self):

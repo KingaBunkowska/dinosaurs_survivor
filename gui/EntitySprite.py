@@ -1,27 +1,16 @@
 from game_mechanics.Entity import Entity
-from game_mechanics.Position import Position
 from game_mechanics.Hitbox import Hitbox
 import pygame
-from gui.Sprite import Sprite
 
 class EntitySprite:
     def __init__(self, entity:Entity, image, hitbox_size=(200, 200), hitbox_start=(0, 0)):
         self.entity = entity
-        self.size, _ = image.get_size() if image!=None else (25,25), 50
+        self.size, _ = image.get_size() if image is not None else (25, 25), 50
         self.image = image
         self.hitbox_size = hitbox_size
         self.hitbox = Hitbox(self.entity.position,hitbox_size,hitbox_start)
 
-        # self.hitbox = (Position(self.entity.position.x - self.size[0] / 2, self.entity.position.y - self.size[1] / 2),
-        #                Position(self.entity.position.x + self.size[0] / 2, self.entity.position.y + self.size[1] / 2))
-
-
     def draw(self, screen):
-
-        # self.hitbox = (Position(self.entity.position.x - self.size[0] / 2, self.entity.position.y - self.size[1] / 2),
-        #                Position(self.entity.position.x + self.size[0] / 2, self.entity.position.y + self.size[1] / 2))
-       
-        
         if self.entity.facing_right:
             rotated_image = pygame.transform.flip(self.image, True, False)
             screen.blit(rotated_image, self.entity.get_position().to_coords(*self.size))
@@ -30,6 +19,6 @@ class EntitySprite:
         # draw hitbox
         pygame.draw.rect(screen, (255,0,0), self.hitbox.to_rect(), 2)
 
-    def _get_entity(self):
+    def get_entity(self):
         return self.entity
 

@@ -1,5 +1,3 @@
-from game_mechanics.Position import Position
-from utils.ImageLoader import ImageLoader
 from gui.Sprite import Sprite
 import pygame
 
@@ -7,7 +5,6 @@ BLACK = (0, 0, 0)
 
 class LevelUpMenu(Sprite):
     def __init__(self, level, choice = True):
-        image = None
         self.level = level
         self.choice = choice
         self.font = pygame.font.SysFont(None, 30)

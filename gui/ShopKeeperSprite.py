@@ -7,7 +7,6 @@ import pygame
 class ShopKeeperSprite(Sprite):
     def __init__(self):
         self.image = ImageLoader.get_keeper()
-        # self.hitbox = (Position(230,230),Position(380,380))
         self.hitbox = Hitbox(Position(180,274),(150,150),(0,0))
     def draw(self,screen):
         screen.blit(self.image,self.hitbox.position.to_coords())

@@ -16,5 +16,5 @@ class SpawnDinos(ActiveAbility):
     def use(self):
         if self.can_use():
             for _ in range(random.randint(2,8)):
-                self.game._add_dinosaur(Dinosaur(DinosaurType.SILESAURUS, False, position=self.target.position + Position(random.randint(-300, 300), random.randint(-40, 40))))
+                self.game.add_dinosaur(Dinosaur(DinosaurType.SILESAURUS, False, position=self.target.position + Position(random.randint(-300, 300), random.randint(-40, 40))))
             self.consume()

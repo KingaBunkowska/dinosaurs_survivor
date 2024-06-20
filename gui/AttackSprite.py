@@ -6,15 +6,7 @@ from game_mechanics.Hitbox import Hitbox
 import pygame
 
 class AttackSprite(Sprite):
-    """
-    Pygame presenter for Attack class
-    """
     def __init__(self, attack:Attack, attack_type = "bullet"):
-        """
-        :param attack: Drawn attack
-        :param width: width of sprite
-        :param height: height of sprite
-        """
         self.attack = attack
         self.rotate = False
         if attack_type != "laser":
@@ -34,11 +26,6 @@ class AttackSprite(Sprite):
         self.hitbox = Hitbox(self.attack.position)
         # self.image = pygame.transform.rotate(self.image, attack.angle)
     def draw(self, screen):
-        """
-        Draw sprite on screen
-        :param screen: Object of screen on witch self is drawn
-        :type screen: pygame.display
-        """
         if self.colision_counter<0:
             if self.rotate:
                 self.image = pygame.transform.rotate(self.image,2)
