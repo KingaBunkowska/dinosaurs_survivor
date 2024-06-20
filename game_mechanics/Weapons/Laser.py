@@ -1,7 +1,7 @@
 from game_mechanics.Weapon import Weapon
 class Laser(Weapon):
     def __init__(self,owner):
-        super().__init__(owner, speed = 1., range = 4, attack_nr = 1)
+        super().__init__(owner, speed = 1., attack_range = 4, attack_nr = 1)
         self.attack_speed -= 20
         self.series = False
         self.shots_in_series = 0
