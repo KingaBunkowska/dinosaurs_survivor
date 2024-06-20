@@ -75,7 +75,8 @@ class Game:
 
         self.structures_sprites = []
 
-        self.delayed_actions.append([self.spawn_boss, 10800])  # po 3 minutach boss
+        # self.delayed_actions.append([self.spawn_boss, 10800])  # po 3 minutach boss
+        self.delayed_actions.append([self.spawn_boss, 240])  # po 3 minutach boss
         self.ticks_from_start = 0
         self.ticks_from_spawn = 0
 
@@ -164,6 +165,10 @@ class Game:
 
             for sprite in self.projectiles_sprites:
                 sprite.draw(self.screen)
+
+            for sprite in self.enemy_projectiles_sprites:
+                sprite.draw(self.screen)
+
 
             if self.option:
                 self.option[0].draw(self.screen)
