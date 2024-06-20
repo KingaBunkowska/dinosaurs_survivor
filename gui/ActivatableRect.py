@@ -1,5 +1,4 @@
 import pygame
-import os
 
 from game_mechanics.Hitbox import Hitbox
 from game_mechanics.Position import Position
@@ -48,8 +47,8 @@ class ActivatableRect:
 
         gray_rect_height = int(self.height * (activation_percent / 100.0))
 
-        if self.image!=None:
-            image_scaled_height = int(self.height)
+        if self.image is not None:
+            # image_scaled_height = int(self.height)
             scaled_image = pygame.transform.scale(self.image, (self.width, self.height))
             self.screen.blit(scaled_image, (self.x, self.y))
 

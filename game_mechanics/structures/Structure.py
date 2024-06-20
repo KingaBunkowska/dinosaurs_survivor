@@ -10,5 +10,5 @@ class Structure(ABC):
         pass
 
     @abstractmethod
-    def on_trigger(self, trigering_entity):
+    def on_trigger(self, triggering_entity):
         pass

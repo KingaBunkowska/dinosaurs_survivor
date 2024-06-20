@@ -1,6 +1,6 @@
 import copy
 
-class Position():
+class Position:
 
     screen_width, screen_height = 1360, 748
 
@@ -34,10 +34,10 @@ class Position():
         return self.x < other.x
 
     def to_coords(self, width=0, height=0):
-        return (self.x - width/2, self.y - height/2)
+        return self.x - width / 2, self.y - height / 2
 
     def distance(self, other=None) -> float:
-        if other != None:
+        if other is not None:
             return ((self.x - other.x)**2 + (self.y - other.y)**2)**(1/2)
         else:
             return (self.x**2 + self.y**2)**(1/2)

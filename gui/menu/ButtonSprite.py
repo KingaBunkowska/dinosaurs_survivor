@@ -1,5 +1,4 @@
 import pygame
-from game_mechanics.Position import Position
 from gui.Sprite import Sprite
 
 class ButtonSprite(Sprite):

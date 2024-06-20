@@ -22,6 +22,8 @@ class BulletsCircle(ActiveAbility):
                 attack.angle = alpha
                 vector_x = 1
                 vector_y = vector_x * tan(radians(alpha))
+                vector_y *= -1 if alpha <=90 or alpha >270 else 1
+                vector_x = 1 if alpha < 90 or alpha > 270 else -1
                 vector = Position(vector_x,vector_y)
                 vector.normalized()
                 attack.direction = vector

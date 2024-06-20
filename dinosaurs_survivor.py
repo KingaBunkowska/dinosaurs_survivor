@@ -1,5 +1,4 @@
 from game_mechanics.Dinosaur import Dinosaur
-from gui.EntitySprite import EntitySprite
 from game_mechanics.Position import Position
 from Game import Game
 from utils.ImageLoader import ImageLoader
@@ -7,8 +6,6 @@ import random
 from game_mechanics.DinosaurType import DinosaurType
 import pygame
 
-from enum import Enum
-from gui.menu.ButtonSprite import ButtonSprite
 from Pit import Pit
 from Menu import Menu
 from GameMode import GameMode
@@ -34,9 +31,9 @@ def handle_events():
         
         available_types = [d for d in DinosaurType if d != DinosaurType.POLONOSUCHUS]
         if dev_mode == 1 and event.type == pygame.MOUSEBUTTONDOWN:
-            game._add_dinosaur(Dinosaur(type=random.choice(available_types), position=Position(*event.pos)))
+            game.add_dinosaur(Dinosaur(type=random.choice(available_types), position=Position(*event.pos)))
         elif dev_mode == 1 and event.type == pygame.KEYUP and event.key == pygame.K_t:
-            game._add_dinosaur(Dinosaur(type=random.choice(available_types), position=Position(*pygame.mouse.get_pos()), friendly=True))
+            game.add_dinosaur(Dinosaur(type=random.choice(available_types), position=Position(*pygame.mouse.get_pos()), friendly=True))
         elif dev_mode == 1 and event.type == pygame.KEYUP and event.key == pygame.K_b:
             game.spawn_boss()
         
@@ -134,7 +131,7 @@ if __name__ == "__main__":
 
         game.run_tick()
         next_game_mode = game.check_gamemode_change()
-        if next_game_mode != None:
+        if next_game_mode is not None:
             if next_game_mode == GameMode.EXIT:
                 running = False
                 continue

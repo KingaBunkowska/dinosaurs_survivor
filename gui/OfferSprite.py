@@ -1,6 +1,5 @@
 import pygame
 from utils.ImageLoader import ImageLoader
-from game_mechanics.Courences import Courences
 from gui.Sprite import Sprite
 
 class OfferSprite(Sprite):

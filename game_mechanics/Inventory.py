@@ -1,4 +1,3 @@
-from game_mechanics.Weapons.Pistol import Pistol
 from game_mechanics.Courences import Courences
 class Inventory:
     def __init__(self):

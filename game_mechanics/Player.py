@@ -1,9 +1,6 @@
 from game_mechanics.Entity import Entity
 from game_mechanics.Statistics import Statistics
 from game_mechanics.Position import Position
-from game_mechanics.Inventory import Inventory
-from game_mechanics.Coin import Coin
-
 
 class Player(Entity):
     def __init__(self):
@@ -19,7 +16,7 @@ class Player(Entity):
             self.statistics.hp -= damage
             self.invincibility = invincibility
 
-    def _use_up_invincibility(self):
+    def use_up_invincibility(self):
         if self.invincibility > 0:
             self.invincibility -= 1
 

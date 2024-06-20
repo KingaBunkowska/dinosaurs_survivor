@@ -1,11 +1,9 @@
 from game_mechanics.Dinosaur import Dinosaur
 from game_mechanics.DinosaurType import DinosaurType
-from game_mechanics.Entity import Entity
 from game_mechanics.Position import Position
 import random
 
 from game_mechanics.active_abilities.BulletsCircle import BulletsCircle
-from game_mechanics.active_abilities.Dash import Dash
 from game_mechanics.active_abilities.SpawnDinos import SpawnDinos
 
 class Boss(Dinosaur):

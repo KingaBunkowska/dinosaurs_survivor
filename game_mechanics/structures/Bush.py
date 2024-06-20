@@ -19,11 +19,12 @@ class Bush(Structure):
         if self.exist and isinstance(entity, Player) and self.position.distance(entity.position) < self.trigger_distance:
             self.on_trigger(entity)
 
-    def on_trigger(self, trigering_entity):
+    def on_trigger(self, triggering_entity):
         if self.is_health_bush:
             trigering_entity.statistics.hp = min(trigering_entity.statistics.hp+5, trigering_entity.statistics.max_hp)
         else:
-            abilities_with_usage = [ability for ability in self.game.active_abilities if ability.usages_left != None]
+            abilities_with_usage = [ability for ability in self.game.active_abilities if
+                                    ability.usages_left is not None]
             if len(abilities_with_usage) != 0:
                 ability_to_increase_usage = random.randint(0, len(abilities_with_usage)-1)
                 abilities_with_usage[ability_to_increase_usage].usages_left += 1

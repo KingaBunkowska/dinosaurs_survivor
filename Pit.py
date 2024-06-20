@@ -10,7 +10,6 @@ from gui.ShopKeeperSprite import ShopKeeperSprite
 from game_mechanics.ShopKeeper import ShopKeeper
 from gui.PlayerSprite import PlayerSprite
 from gui.ShopInterface import ShopInterface
-from gui.OfferSprite import OfferSprite
 
 
 class Pit:
@@ -35,7 +34,7 @@ class Pit:
         self.player_sprite.draw(self.screen)
         [rect.draw(((self.abilities_chosen[i]+1)%2)*100) for i, rect in enumerate(self.abilities_rects)]
 
-        if self.player_sprite.hitbox.colide(self.keeper_sprite.hitbox):
+        if self.player_sprite.hitbox.collide(self.keeper_sprite.hitbox):
             self.shop_interface.draw(self.screen)
         else:
             self.check_abilities_collision()
@@ -45,14 +44,14 @@ class Pit:
         return None
 
     def click_buttons(self, click_pos):
-        if self.player_sprite.hitbox.colide(self.keeper_sprite.hitbox):
+        if self.player_sprite.hitbox.collide(self.keeper_sprite.hitbox):
             for i, offer in enumerate(self.shop_interface.offers):
                 if offer.button_rect.collidepoint(click_pos):
                     self.shop_interface.apply_choice(i)
 
     def check_abilities_collision(self):
         for i, ability_rect in enumerate(self.abilities_rects):
-            if self.player_sprite.hitbox.colide(ability_rect.hitbox) and self.abilities_chosen[i] == 0:
+            if self.player_sprite.hitbox.collide(ability_rect.hitbox) and self.abilities_chosen[i] == 0:
                 self.check_ability(i)
 
     def check_ability(self, chosen_i):
