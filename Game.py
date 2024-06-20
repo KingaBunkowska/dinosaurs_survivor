@@ -53,7 +53,6 @@ class Game:
         self.time_of_contact_damage = 10
 
         self.option = []
-        # self.active_abilities = [PutSpikes(self.player, self), Dash(self.player)]
 
         self.player_abilities = [Dash, Heal, Fire, PutSpikes, SlowDownTime]
 
@@ -66,13 +65,13 @@ class Game:
 
         self.health_bar_gui = HealthBar(50, 30, self.player.statistics.max_hp, self.screen)
         self.ability_sprites_and_duration = []
-        self.delayed_actions = []  # [method, ticks_from_now_to_use]
+        self.delayed_actions = []  # elem [method, ticks_from_now_to_use]
         self.running = True
 
         self.structures_sprites = []
 
-        # self.delayed_actions.append([self.spawn_boss, 10800])  # po 3 minutach boss
-        self.delayed_actions.append([self.spawn_boss, 240])  # po 3 minutach boss
+        self.delayed_actions.append([self.spawn_boss, 10800])  # spawn boss after 3 minutes
+        # self.delayed_actions.append([self.spawn_boss, 240]) # presentation
         self.ticks_from_start = 0
         self.ticks_from_spawn = 0
 
@@ -251,21 +250,18 @@ class Game:
             self.option_cooldown_frames = 0
             option = self.option.pop(0)
             lvl = option.level
-            # print(option,nr,lvl)
 
             if lvl == 5:
                 if nr == 1:
-                    # self.weapon = Rifle(self.player)
                     rifle = Rifle(self.player)
                     self.inventory.rifle_upgrade(rifle)
                     self.pickable_sprites.append(PickableWeaponSprite(PickableWeapons(Position(x, y), rifle)))
                 if nr == 2:
-                    # self.weapon = Pickaxe(self.player)
                     pickaxe = Pickaxe(self.player)
                     self.inventory.pickaxe_upgrade(pickaxe)
                     self.pickable_sprites.append(
                         PickableWeaponSprite(PickableWeapons(Position(x, y), pickaxe)))
-                # self.player.last_level_reward += 1
+
             if lvl == 10:
                 if self.weapon.__class__ == Pickaxe:
                     if nr == 1:
@@ -290,12 +286,11 @@ class Game:
                         self.pickable_sprites.append(
                             PickableWeaponSprite(PickableWeapons(Position(x, y), shotgun)))
                 print(self.weapon.accuracy, self.weapon.attack_nr)
-                # self.player.last_level_reward += 1
+
 
             if lvl != 5 and lvl != 10:
                 self.player.stat_up(10, nr)
-                # self.player.last_level_reward += 1
-        # print(self.player.statistics.max_hp)
+
 
     def draw_gui(self) -> None:
         self.health_bar_gui.update_max_health(self.player.statistics.max_hp)

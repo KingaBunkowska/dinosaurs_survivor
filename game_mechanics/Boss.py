@@ -18,16 +18,8 @@ class Boss(Dinosaur):
         self.ability_to_use = self.abilities[0]
 
     def use_abilities(self):
-        # print(self.using_ability_in)
-        # if self.using_ability_in >= 0:
-        #     self.using_ability_in -= 1
-        #     if self.using_ability_in == -1:
-        #         self.ability_to_use.use()
-        # else:
             for ability in self.abilities:
                 if ability.can_use() and random.randint(0,4)==0:
-                #     self.using_ability_in = 30
-                #     self.ability_to_use = ability
                     ability.use()
 
     def decrease_cooldown(self):
