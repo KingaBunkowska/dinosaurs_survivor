@@ -17,10 +17,13 @@ class Attack:
         self.target = target
 
     def calculate_damage(self, target):
+        damage = self.caster.statistics.attack
         if target in self.attacked:
             return 0
         self.attacked.add(target)
-        return 3.
+        if random.uniform(0,100) <= self.caster.statistics.critical_chance:
+            damage *= self.caster.statistics.critical_multiplier
+        return damage
 
     def calculate_angle(self,target):
         vector = target - self.position

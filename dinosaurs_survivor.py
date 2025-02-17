@@ -112,6 +112,7 @@ if __name__ == "__main__":
             prev_game_mode = game_mode
             if game_mode == GameMode.PIT:
                 game = Pit(screen,inventory)
+                game.keeper.restock()
             elif game_mode == GameMode.GAME:
                 game = Game(screen, inventory, game.abilities_chosen)
             elif game_mode == GameMode.MENU:

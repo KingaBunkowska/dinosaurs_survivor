@@ -120,6 +120,8 @@ class Game:
                     self.dinosaur_sprites[i] = None
                     if self.player.get_experience(dino.entity.give_exp()):
                         self.make_option()
+                if dino.entity.ally and dino.entity.ttl <= 0:
+                    self.dinosaur_sprites[i] = None
             # remove dinosaurs that disappeared
             self.dinosaur_sprites = [d for d in self.dinosaur_sprites if d is not None]
 
@@ -289,7 +291,7 @@ class Game:
 
 
             if lvl != 5 and lvl != 10:
-                self.player.stat_up(10, nr)
+                self.player.stat_up(nr)
 
 
     def draw_gui(self) -> None:
@@ -377,7 +379,7 @@ class Game:
         available_types = [d for d in DinosaurType if d != DinosaurType.POLONOSUCHUS]
         for i in range(random.randint(1, 3)):
             self.add_dinosaur(
-                Dinosaur(type=random.choice(available_types), position=PositionGenerator.generate_near_border_position()))
+                Dinosaur(type=random.choice(available_types), position=PositionGenerator.generate_near_border_position(), statistics_multiplier = (1. + self.player.level/50)))
 
     def spawn_random_dinosaur_at_location(self, position, friendly = False):
         available_types = [d for d in DinosaurType if d != DinosaurType.POLONOSUCHUS]

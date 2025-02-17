@@ -2,7 +2,7 @@ from game_mechanics.Position import Position
 
 class Entity:
 
-    invincibility_base_time = 60
+    invincibility_base_time = 40
   
     def __init__(self, statistics = None, position = Position(750, 330), facing_right=False):
         self.statistics = statistics
@@ -38,7 +38,7 @@ class Entity:
             or dealer is None
                 or (dealer is not None and dealer not in self.invincibility.keys())):
 
-            self.statistics.hp -= damage
+            self.statistics.hp -= (damage - self.statistics.defense)
             if dealer is not None:
                 self.invincibility[dealer] = self.invincibility_base_time
 

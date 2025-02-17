@@ -10,15 +10,22 @@ from gui.EggSprite import EggSprite
 
 
 class Dinosaur(Entity):
-    def __init__(self, type = DinosaurType.STEGOSAUR, friendly = False, position=Position(100, 100)):
-        super().__init__(statistics = type.value["statistics"].changed_by(speed = random.normalvariate(0, 0.1)), position=position, facing_right=type.value["facing_right"])
+    def __init__(self, type = DinosaurType.STEGOSAUR, friendly = False, position=Position(100, 100), statistics_multiplier = 1.):
+        super().__init__(statistics = type.value["statistics"].changed_by(speed = random.normalvariate(0, 0.15)), position=position, facing_right=type.value["facing_right"])
+        self.statistics.multiply_statistics(statistics_multiplier)
         self.type = type
         self.ally = friendly
+        self.ttl = 0
+        if self.ally:
+            self.ttl = 540
+        else:
+            self.ttl = -1
 
     def move(self, player_position:Position, dinosaurs):
         if not self.ally:
             move_vector = player_position - self.position
         else:
+            self.ttl -= 1
             if dinosaurs:
                 move_vector = min(dinosaurs, key = lambda dino: self.position.distance(dino.position)).position - self.position
             else: 

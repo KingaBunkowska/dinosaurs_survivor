@@ -27,15 +27,15 @@ class Player(Entity):
             return True
         return False
 
-    def stat_up(self,value,stat):
+    def stat_up(self,stat):
         if stat == 1:
-            self.increase_max_health(value)
+            self.increase_max_health()
         elif stat == 2:
-            self.statistics.speed_up(value//2)
+            self.statistics.speed_up()
         else:
-            self.statistics.damage_up(value)
+            self.statistics.damage_up()
 
-    def increase_max_health(self, value):
+    def increase_max_health(self, value = 5):
         percent_of_change = (self.statistics.max_hp + value)/self.statistics.max_hp
         self.statistics.max_hp += value
         self.statistics.hp *= percent_of_change 

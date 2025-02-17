@@ -12,6 +12,7 @@ class ShopInterface(Sprite):
         self.keeper = keeper
         # self.offers = [OfferSprite(self.offers_pos[0],),OfferSprite(self.offers_pos[1],[(12,1)],"",None,0),OfferSprite(self.offers_pos[2],[(12,1)],"",None,0),OfferSprite(self.offers_pos[3],[(12,1)],"",None,0),OfferSprite(self.offers_pos[4],[(12,1)],"",None,1),OfferSprite(self.offers_pos[5],[(12,1)],"",None,1),OfferSprite(self.offers_pos[6],[(12,1)],"",None,2)]
         self.offers = [OfferSprite(self.offers_pos[i],*args) for i,args in enumerate(self.keeper.stock)]
+
         self.info_font = pygame.font.SysFont(None, 40)
         self.courency_image = {Courences.GOLD: ImageLoader.get_pickable_sprite(Courences.GOLD.value[0])}
     def draw(self,screen):
